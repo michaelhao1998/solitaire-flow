@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Solitaire Flow · 玩法原型 v4</title>
+<title>Solitaire Flow · 玩法原型 v5</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:#e4dfd4;overflow:hidden;font-family:"Microsoft YaHei","微软雅黑",sans-serif;color:#1f2329;-webkit-tap-highlight-color:transparent}
@@ -23,7 +23,7 @@ html,body{height:100%;background:#e4dfd4;overflow:hidden;font-family:"Microsoft 
 #track.moving .dash{animation:run .32s linear infinite}
 @keyframes run{to{stroke-dashoffset:-16}}
 .pileSlot{position:absolute;width:56px;height:77px;border-radius:9px;border:2px solid}
-.pileInfo{position:absolute;width:96px;text-align:center;font-size:11px;color:#6b7280;white-space:nowrap}
+.pileInfo{position:absolute;width:96px;z-index:6;text-align:center;font-size:11px;color:#6b7280;white-space:nowrap}
 .pileInfo b{color:#374151}
 #beltInfo{position:absolute;left:110px;top:258px;width:170px;text-align:center;font-size:11.5px;color:#4b5563}
 .pips{display:inline-flex;gap:3px;vertical-align:middle;margin-left:4px}
@@ -35,7 +35,7 @@ html,body{height:100%;background:#e4dfd4;overflow:hidden;font-family:"Microsoft 
 .card b{font-size:27px;letter-spacing:-1px}
 .card i{position:absolute;font-style:normal;font-size:12px;line-height:12px}
 .card i.tl{top:4px;left:5px}.card i.br{bottom:4px;right:5px}
-.card.k0{background:#e5484d}.card.k1{background:#2f74e8}.card.k2{background:#1d9a5f}
+.card.k0{background:#e5484d}.card.k1{background:#2f74e8}.card.k2{background:#1d9a5f}.card.k3{background:#8e57d6}
 .card.back{background:#2f3743;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0 4px,transparent 4px 8px);border:2px solid #444d5c;color:transparent}
 .card.back.peek{color:rgba(255,255,255,.75)}
 .card.back.peek b{font-size:15px}
@@ -50,9 +50,35 @@ html,body{height:100%;background:#e4dfd4;overflow:hidden;font-family:"Microsoft 
 .stkSlot{position:absolute;width:56px;height:77px;border-radius:9px;border:2px dashed;cursor:pointer}
 .stkLbl{position:absolute;width:80px;text-align:center;font-size:11.5px;font-weight:600}
 #stkTitle{position:absolute;left:16px;top:558px;font-size:11px;color:#8b8577}
-#last{position:absolute;left:12px;top:667px;width:366px;height:38px;overflow:hidden;font-size:12px;line-height:15px;color:#374151;background:#fbf9f4;border:1px solid #ece5d6;border-radius:10px;padding:3px 10px}
-#stats{position:absolute;left:12px;top:710px;width:366px;font-size:11px;color:#7a7466;display:flex;justify-content:space-between}
-#bar{position:absolute;left:12px;top:742px;width:366px;height:44px;display:flex;gap:8px}
+#last{position:absolute;left:12px;top:713px;width:366px;height:36px;overflow:hidden;font-size:12px;line-height:15px;color:#374151;background:#fbf9f4;border:1px solid #ece5d6;border-radius:10px;padding:2px 10px}
+#bar{position:absolute;left:12px;top:755px;width:366px;height:38px;display:flex;gap:8px}
+#bar .btn{height:36px}
+#props{position:absolute;left:12px;top:665px;width:366px;height:42px;display:flex;gap:8px}
+.prop{flex:1;height:42px;border-radius:12px;border:1px solid #e0c98f;background:#fff8e6;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;color:#5a3d00;position:relative;touch-action:none}
+.prop b{font-size:18px;line-height:18px}.prop span{font-size:13px}
+.prop em{font-style:normal;font-family:"IBM Plex Mono",Consolas,monospace;font-size:11px;min-width:18px;height:18px;line-height:18px;border-radius:9px;background:#e0a800;color:#fff;padding:0 5px}
+.prop.wildp{background:#ffe9a8;border-color:#e0a800}
+.prop em.lk{background:#9ca3af}
+.prop.off{opacity:.42;cursor:not-allowed;filter:grayscale(.6)}
+.prop.armed{box-shadow:0 0 0 3px rgba(240,180,0,.55);animation:wpulse .9s ease-in-out infinite}
+.card .ice{position:absolute;inset:-2px;border-radius:8px;background:linear-gradient(160deg,rgba(225,244,255,.62),rgba(170,215,245,.38));border:2px solid #6fb7e3;box-shadow:inset 0 0 10px #fff;pointer-events:none}
+.card .ice em{position:absolute;right:-7px;top:-7px;width:20px;height:20px;border-radius:10px;background:#2f78a8;color:#fff;font-style:normal;font-size:12px;line-height:20px;text-align:center;font-family:"IBM Plex Mono",Consolas,monospace}
+.card .ice i{position:absolute;left:0;right:0;bottom:5px;text-align:center;font-style:normal;font-size:16px;color:#2f78a8}
+.card .keym{position:absolute;right:3px;top:3px;width:18px;height:18px;border-radius:9px;background:#ffd34d;color:#6b4a00;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1.5px #fff}
+.card.back .keym{right:auto;left:50%;top:-1px;transform:translateX(-50%);width:34px;height:13px;border-radius:0 0 7px 7px;box-shadow:0 0 0 1px #fff}
+.card.back .keym svg{width:10px;height:10px}
+.lockOv{position:absolute;border:2px dashed #8a5a00;border-radius:10px;background:repeating-linear-gradient(45deg,rgba(120,90,20,.18) 0 6px,rgba(120,90,20,.05) 6px 12px);z-index:40;pointer-events:none;transition:opacity .5s}
+.lockOv .lk{position:absolute;left:50%;top:3px;transform:translateX(-50%);background:#8a5a00;color:#fff;border-radius:8px;padding:1px 6px;font-size:11px;line-height:16px;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.lockOv.open{opacity:0}
+.stkLockOv{position:absolute;width:56px;height:77px;border-radius:9px;background:rgba(40,36,30,.64);z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#fff;font-size:11px;line-height:14px;text-align:center;pointer-events:none;transition:opacity .5s}
+.stkLockOv.open{opacity:0}
+.dirB{position:absolute;width:22px;height:22px;border-radius:11px;color:#fff;font-size:15px;font-weight:700;line-height:22px;text-align:center;z-index:8;box-shadow:0 0 0 2px #fff}
+.card.nope{animation:nope .3s}
+@keyframes nope{25%{margin-left:-4px}75%{margin-left:4px}}
+.intro{display:flex;flex-direction:column;gap:4px;align-items:flex-start;background:#fff6dc;border:1px solid #f0cf7a;border-radius:10px;padding:8px 10px;margin:8px 0}
+.intro .tg{flex:none;font-size:11px;background:#e0a800;color:#fff;border-radius:6px;padding:1px 6px;margin-top:1px}
+.intro p{font-size:12.5px;line-height:18px}
+.lvb .mk{font-size:10px;color:#b07d00}
 .btn{flex:1;height:42px;border-radius:12px;border:none;background:#2b2f36;color:#fff;font-size:14px;font-family:inherit;cursor:pointer}
 .btn.ghost{background:#fff;color:#2b2f36;border:1px solid #d6cdbb}
 .btn:disabled{opacity:.4;cursor:not-allowed}
@@ -119,8 +145,12 @@ html,body{height:100%;background:#e4dfd4;overflow:hidden;font-family:"Microsoft 
   <div id="beltInfo">传送带<span class="pips" id="beltPips"></span> <b class="mono" id="beltTxt"></b></div>
   <div id="entLbl">▲ 入口</div>
   <div id="stkTitle">补牌区 · 点一叠：顶牌成为该色新堆顶</div>
+  <div id="props">
+    <button class="prop" id="pUndo" title="撤销上一步"><b>↶</b><span>撤回</span><em id="nUndo">3</em></button>
+    <button class="prop wildp" id="pWild" title="拖到任意归牌堆"><b>★</b><span>万能牌</span><em id="nWild">1</em></button>
+    <button class="prop" id="pTray" title="传送带 +1 格"><b>＋</b><span id="tTray">加托盘</span><em id="nTray">1</em></button>
+  </div>
   <div id="last">点出牌区每列最上面的牌。</div>
-  <div id="stats" class="mono"></div>
   <div id="bar">
     <button class="btn ghost" id="bRestart">↻ 重开</button>
     <button class="btn ghost" id="bDebug">测试面板</button>
@@ -132,33 +162,53 @@ html,body{height:100%;background:#e4dfd4;overflow:hidden;font-family:"Microsoft 
   <div class="ov" id="ovLevels"><div class="panel" id="pLevels"></div></div>
   <div class="ov" id="ovDebug"><div class="panel" id="pDebug"></div></div>
   <div class="ov" id="ovRules"><div class="panel">
-    <h2>规则 · Solitaire Flow</h2><p class="sub">三个堆各管一种颜色，颜色永远不变。像三局 TriPeaks 同时进行。</p>
+    <h2>规则 · Solitaire Flow v5</h2><p class="sub">三个堆各管一种颜色，颜色永远不变。像三局 TriPeaks 同时进行。</p>
     <ol>
       <li><b>接龙</b>：牌只能落到<b>同色</b>的堆上，且点数与堆顶<b>差 1</b>（升降都行，A 只接 2，K 只接 Q）。</li>
       <li><b>出牌区</b>：点每列最上面一张，它<b>一律先上传送带</b>：带子把空托盘转到入口 → 牌进托盘 → 带子转动，经过本色闸口时差 1 就落堆。<br>· 接不上的牌留在带上占 1 格，等本色堆顶变到差 1 时再落。<br>· <b>传送带满了就一张都放不上去</b>（能接的也不行），只能翻补牌。</li>
       <li><b>补牌区</b>：三叠，每色一叠，顶牌明牌。点哪一叠，它的顶牌就<b>直接成为那一色的新堆顶</b>（不用接龙），用来接上卡住的牌。</li>
-      <li><b>★ 万能牌（道具）</b>：补牌区右边。把它<b>拖到任意一个归牌堆</b>（或先点 ★、再点归牌堆），盖住堆顶：这一堆的<b>下一张同色牌不论点数都能接</b>，接上后恢复差 1 规则。带上正在等的牌会马上落下。用过万能牌的局最高 2★。</li>
+      <li><b>道具栏</b>（补牌区下方）：<br>· <b>↶ 撤回</b>：撤销上一步，每关 3 次，不影响星级。<br>· <b>★ 万能牌</b>：<b>拖到任意一个归牌堆</b>（或先点 ★ 再点堆），这一堆的下一张同色牌不论点数都能接。<br>· <b>＋ 加托盘</b>（第 4 关起）：传送带 +1 格。<br>用过万能牌或加托盘的局最高 2★。</li>
+      <li><b>关卡机制</b>：第 2 关起每关有一种新机制（冰封牌、锁与钥匙、补牌上锁、单向堆、四色四堆），开局面板会说明。</li>
       <li><b>过关</b>：出牌区和传送带都清空。比“最少要翻的张数”多翻得越少，星越高（3★ 仅标记）。</li>
-      <li><b>失败</b>：传送带已满（或出牌区已空）、带上的牌都落不下，补牌和万能牌都用完。</li>
+      <li><b>失败</b>：没有任何能做的动作（道具也用完）。失败时还能撤回。</li>
     </ol>
     <p class="note">每关都由生成器先造好一条解并用真实规则回放验证，保证有解；“至少要翻几张补牌”是数学上的精确值。</p>
     <div class="row"><button class="btn" onclick="UI.close('ovRules')">知道了</button></div>
   </div></div>
 </div></div>
 <script>
-/* Solitaire Flow · 规则引擎 v3（分色 TriPeaks · 补牌分 3 叠）——纯逻辑，浏览器与 Node 共用
- * 口径（2026-10-26 michael 拍板 ③）：
- *  - 3 色 = 3 堆，堆色固定；落堆 = 同色且点数差 1（K↔A 衔接为参数，默认关）
- *  - 出牌区 M 列全暗，只露顶张；关卡由生成器自由配牌（不要求整副），保证有解
- *  - 点出牌区顶张：一律先进传送带空托盘 → 带子转动 → 经过本色闸口时若差 1 即落堆；接不上就留在带上占 1 格（v3.1，10-26 michael：上带动画不能省）
- *    ⇒ 带满时任何牌都放不上去（包括能接的），只能翻补牌
- *  - 补牌区按颜色分 3 叠，各叠顶张明牌：点哪一叠，该叠顶张直接成为该色新堆顶（重置这一色的链）
- *  - 胜：出牌区与带子清空；负：没有任何可执行动作（顶张都接不上、带满或列空、补牌全空）
+/* Solitaire Flow · 规则引擎 v5 —— 纯逻辑，浏览器与 Node 共用（v4 的 engine3.js 原样保留）
+ * 相对 v4：
+ *  - 颜色数可变（3 或 4，= 堆数 = 补牌叠数）；每关可配轨道圆角 R（第 5、6 关“跑道形”）与堆位置
+ *  - 关卡机制：冰封牌 ice、锁/钥匙 lock+key、补牌叠上锁 stockLock、定向堆 dir
+ *  - 道具：万能牌 wild（拖到任意堆）、加托盘 tray；撤回在界面层用快照实现（引擎提供 clone）
+ * 关卡数据 lv：{ piles:[r..], cols:[[ [c,r,{ice,key}?], ... ]], stocks:[[r..]..], B, W, starLeft, wild, tray,
+ *               lock:{col}, stockLock:{c,n}, dir:[0|1|-1 ..], shape:{R, pileX, pileY} }
  */
-var ENGINE3 = (function () {
+var ENGINE5 = (function () {
   "use strict";
-  var GEO = (function () {
-    var x0 = 32, x1 = 358, y0 = 24, y1 = 262, R = 44;
+  var EPS = 1e-7;
+  function mod1(x) { return ((x % 1) + 1) % 1; }
+  function cdist(a, b) { var d = mod1(a - b); return Math.min(d, 1 - d); }
+  function adj(a, b, wrap) { var d = Math.abs(a - b); return d === 1 || (wrap && d === 12); }
+  function rng(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) >>> 0; var t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ================= 轨道几何（按 R 与堆位置缓存） ================= */
+  var X0 = 32, X1 = 358, Y0 = 24, Y1 = 262, ENT_X = 110;
+  var DEF_PILE_X = { 3: [100, 195, 290], 4: [84, 158, 232, 306] };
+  var GEO_CACHE = {};
+  function makeGeo(K, shape) {
+    shape = shape || {};
+    var R = shape.R || 44, pileX = shape.pileX || DEF_PILE_X[K], key = R + "|" + pileX.join(",");
+    if (GEO_CACHE[key]) return GEO_CACHE[key];
+    var x0 = X0, x1 = X1, y0 = Y0, y1 = Y1;
     var top = x1 - x0 - 2 * R, side = y1 - y0 - 2 * R, arc = Math.PI * R / 2;
     var segs = [
       { k: "L", ax: x0 + R, ay: y0, bx: x1 - R, by: y0, len: top },
@@ -169,10 +219,10 @@ var ENGINE3 = (function () {
       { k: "A", cx: x0 + R, cy: y1 - R, a0: 90, a1: 180, len: arc },
       { k: "L", ax: x0, ay: y1 - R, bx: x0, by: y0 + R, len: side },
       { k: "A", cx: x0 + R, cy: y0 + R, a0: 180, a1: 270, len: arc }
-    ];
+    ].filter(function (s) { return s.len > 1e-9; });
     var P = 0; segs.forEach(function (s) { P += s.len; });
     function point(t) {
-      var s = (((t % 1) + 1) % 1) * P;
+      var s = mod1(t) * P;
       for (var i = 0; i < segs.length; i++) {
         var g = segs[i];
         if (s <= g.len || i === segs.length - 1) {
@@ -184,182 +234,116 @@ var ENGINE3 = (function () {
         s -= g.len;
       }
     }
-    var PILE_X = [100, 195, 290];
-    var GATES = PILE_X.map(function (x) { return (x - (x0 + R)) / P; });
-    var ENT_X = 110;
-    var ENT = (top + arc + side + arc + ((x1 - R) - ENT_X)) / P;
-    return { x0: x0, x1: x1, y0: y0, y1: y1, R: R, P: P, point: point, PILE_X: PILE_X, GATES: GATES, ENT: ENT, ENT_X: ENT_X };
-  })();
-  var GATES = GEO.GATES, ENT = GEO.ENT, EPS = 1e-7;
-
-  function rng(seed) {
-    var a = seed >>> 0;
-    return function () {
-      a = (a + 0x6D2B79F5) >>> 0; var t = a;
-      t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
+    /* 轨道上半圈（或下半圈）横坐标为 x 的点对应的参数 t：数值搜索 + 二分细化 */
+    function tAtX(x, upper) {
+      var N = 4000, best = -1, bd = 1e9, mid = (y0 + y1) / 2;
+      for (var i = 0; i < N; i++) { var p = point(i / N); if ((p.y < mid) !== upper) continue; var d = Math.abs(p.x - x); if (d < bd) { bd = d; best = i; } }
+      var lo = (best - 1) / N, hi = (best + 1) / N;
+      for (var k = 0; k < 40; k++) { var m1 = lo + (hi - lo) / 3, m2 = hi - (hi - lo) / 3; if (Math.abs(point(m1).x - x) < Math.abs(point(m2).x - x)) hi = m2; else lo = m1; }
+      return mod1((lo + hi) / 2);
+    }
+    var gates = pileX.map(function (x) { return tAtX(x, true); });
+    var ent = tAtX(ENT_X, false);
+    var g = { R: R, x0: x0, x1: x1, y0: y0, y1: y1, P: P, point: point, pileX: pileX, gates: gates, ENT: ent, ENT_X: ENT_X, pileY: shape.pileY || 162, key: key };
+    GEO_CACHE[key] = g;
+    return g;
   }
-  function shuffle(a, r) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-  function adj(a, b, wrap) { var d = Math.abs(a - b); return d === 1 || (wrap && d === 12); }
-  function mod1(x) { return ((x % 1) + 1) % 1; }
-  function cdist(a, b) { var d = mod1(a - b); return Math.min(d, 1 - d); }
-
-  /* ================= 关卡生成器（自由配牌 · 正向造解 · 倒序发牌） =================
-   * p: { M 列数, B 带位, T 牌阵张数, run:[a,b] 每色链长区间, keep 方向保持概率, slack 每叠富余张数, W 衔接, seed }
-   * 解 = 一串事件：{land:c,r}（出牌区一张差 1 的牌）或 {draw:c,r}（c 色补牌叠翻出一张，重置 c 色堆顶）
-   * 断链规则：每色各自计链长，用完就在该色补牌叠造一张“新起点”——让“哪色接不上就翻哪色”的直觉与解一致
-   */
-  function generate(p) {
-    var r = rng(p.seed), C = 3, W = !!p.W;
-    var piles = [], P = [], dir = [], left = [], events = [], draws = [[], [], []], landN = 0;
-    function newRun() { return p.run[0] + Math.floor(r() * (p.run[1] - p.run[0] + 1)); }
-    for (var c = 0; c < C; c++) { var k0 = 2 + Math.floor(r() * 11); piles.push(k0); P.push(k0); dir.push(r() < .5 ? 1 : -1); left.push(newRun()); }
-    var lastC = -1;
-    while (landN < p.T) {
-      // 颜色交错：不连续 3 次选同一色，制造“三条链并行”
-      var cc = Math.floor(r() * C);
-      if (cc === lastC && r() < .55) cc = (cc + 1 + Math.floor(r() * 2)) % C;
-      lastC = cc;
-      if (left[cc] <= 0) {
-        var nr = 2 + Math.floor(r() * 11);
-        if (Math.abs(nr - P[cc]) <= 1) nr = ((nr + 5) % 13) + 1;
-        P[cc] = nr; draws[cc].push(nr); events.push({ draw: cc, r: nr });
-        dir[cc] = r() < .5 ? 1 : -1; left[cc] = newRun(); continue;
-      }
-      if (r() > p.keep) dir[cc] = -dir[cc];
-      var k = P[cc] + dir[cc];
-      if (k < 1 || k > 13) { if (W) k = k < 1 ? 13 : 1; else { dir[cc] = -dir[cc]; k = P[cc] + dir[cc]; } }
-      P[cc] = k; events.push({ land: cc, r: k }); left[cc]--; landN++;
-    }
-    // 倒序发进各列：解里先出的牌在列的上面
-    var tab = events.filter(function (e) { return e.land != null; });
-    var slots = []; for (var i = 0; i < tab.length; i++) slots.push(i % p.M); shuffle(slots, r);
-    var cols = []; for (var m = 0; m < p.M; m++) cols.push([]);
-    for (var j = tab.length - 1; j >= 0; j--) { cols[slots[j]].push([tab[j].land, tab[j].r]); tab[j].col = slots[j]; }
-    // 补牌叠：解中用到的按顺序在上（数组末尾 = 顶），富余随机牌垫在下面
-    var stocks = [[], [], []];
-    for (var s = 0; s < C; s++) {
-      for (var x = 0; x < p.slack; x++) stocks[s].push(1 + Math.floor(r() * 13));
-      for (var y = draws[s].length - 1; y >= 0; y--) stocks[s].push(draws[s][y]);
-    }
-    return { piles: piles, cols: cols, stocks: stocks, B: p.B, M: p.M, W: W, seed: p.seed, slackTotal: p.slack * 3, solution: events };
-  }
-
-  /* ================= 分段生成器（v3.2）：保证“至少翻 N 张补牌”才能通关 =================
-   * 每色把 A–K 切成 b 段，段与段之间至少空出 1 个点数（出牌区里没有这个点数的牌）。
-   * 同一色的堆只能沿 ±1 走，跨不过空档；想进下一段，只能翻一张该色补牌把堆顶直接放进那一段。
-   * ⇒ 该色至少要翻 (b−1) 张；全局下界 = Σ(b−1)。生成器的解正好用这么多张 ⇒ 最少翻牌数 = 下界（精确）。
-   * p: { mode:'bands', bands:[b红,b蓝,b绿], T, M, B, keep, slack, seed }
-   */
-  function splitBands(b, r) {
-    var free = 13 - (b - 1), lens = [], left = free;
-    for (var i = 0; i < b; i++) { var rest = b - i - 1, mn = 2, mx = left - rest * 2; var L = i === b - 1 ? left : mn + Math.floor(r() * (Math.max(mn, Math.min(mx, Math.round(free / b) + 2)) - mn + 1)); lens.push(L); left -= L; }
-    var out = [], x = 1; lens.forEach(function (L) { out.push([x, x + L - 1]); x += L + 1; });
-    return shuffle(out, r);
-  }
-  function generateBands(p) {
-    var r = rng(p.seed), C = 3, piles = [], plan = [], P = [], dir = [], events = [], draws = [[], [], []];
-    var nb = p.bands.reduce(function (a, b) { return a + b; }, 0);
-    for (var c = 0; c < C; c++) {
-      var bs = splitBands(p.bands[c], r), q = [];
-      bs.forEach(function (band) { q.push({ lo: band[0], hi: band[1], n: 0 }); });
-      plan.push(q);
-    }
-    // 牌阵张数按段数分配，每段至少 3 张
-    var cells = []; plan.forEach(function (q, c) { q.forEach(function (bd, k) { cells.push([c, k]); }); });
-    cells.forEach(function (x) { plan[x[0]][x[1]].n = 3; });
-    for (var t = cells.length * 3; t < p.T; t++) { var x = cells[Math.floor(r() * cells.length)]; plan[x[0]][x[1]].n++; }
-    var cur = [0, 0, 0];
-    for (c = 0; c < C; c++) { var b0 = plan[c][0]; var s0 = b0.lo + Math.floor(r() * (b0.hi - b0.lo + 1)); piles.push(s0); P.push(s0); dir.push(r() < .5 ? 1 : -1); }
-    function step(c) {
-      var bd = plan[c][cur[c]];
-      if (r() > p.keep) dir[c] = -dir[c];
-      var k = P[c] + dir[c];
-      if (k < bd.lo || k > bd.hi) { dir[c] = -dir[c]; k = P[c] + dir[c]; }
-      if (k < bd.lo || k > bd.hi) k = P[c] + (k < bd.lo ? 1 : -1);
-      P[c] = k; bd.n--; events.push({ land: c, r: k });
-    }
-    var lastC = -1, guard = 0, landN = 0;
-    while (landN < p.T && guard++ < 5000) {
-      var live = [0, 1, 2].filter(function (cc) { return plan[cc][cur[cc]].n > 0 || cur[cc] < plan[cc].length - 1; });
-      if (!live.length) break;
-      var cc = live[Math.floor(r() * live.length)];
-      if (cc === lastC && live.length > 1 && r() < .6) cc = live[(live.indexOf(cc) + 1 + Math.floor(r() * (live.length - 1))) % live.length];
-      lastC = cc;
-      if (plan[cc][cur[cc]].n <= 0) {          // 本段走完：翻该色补牌进下一段
-        cur[cc]++; var nb2 = plan[cc][cur[cc]], nr = nb2.lo + Math.floor(r() * (nb2.hi - nb2.lo + 1));
-        P[cc] = nr; draws[cc].push(nr); events.push({ draw: cc, r: nr }); dir[cc] = r() < .5 ? 1 : -1; continue;
-      }
-      step(cc); landN++;
-    }
-    var tab = events.filter(function (e) { return e.land != null; });
-    var slots = []; for (var i = 0; i < tab.length; i++) slots.push(i % p.M); shuffle(slots, r);
-    var cols = []; for (var m = 0; m < p.M; m++) cols.push([]);
-    for (var j = tab.length - 1; j >= 0; j--) { cols[slots[j]].push([tab[j].land, tab[j].r]); tab[j].col = slots[j]; }
-    var stocks = [[], [], []];
-    for (var sc = 0; sc < C; sc++) {
-      for (var y = 0; y < p.slack; y++) stocks[sc].push(1 + Math.floor(r() * 13));
-      for (var z = draws[sc].length - 1; z >= 0; z--) stocks[sc].push(draws[sc][z]);
-    }
-    return { piles: piles, cols: cols, stocks: stocks, B: p.B, M: p.M, W: false, seed: p.seed, slackTotal: p.slack * 3, solution: events, bandsPlan: plan.map(function (q) { return q.map(function (b) { return [b.lo, b.hi]; }); }) };
-  }
-  /* 可证明下界：每色出牌区点数按“连续的点数”分成若干段；起始堆顶能直接够到的段不算；其余每段至少翻 1 张该色补牌 */
-  function drawLowerBound(lv) {
-    var total = 0, per = [];
-    for (var c = 0; c < 3; c++) {
-      var has = {}; lv.cols.forEach(function (col) { col.forEach(function (x) { if (x[0] === c) has[x[1]] = 1; }); });
-      var comps = [], curc = null;
-      for (var k = 1; k <= 13; k++) { if (has[k]) { if (!curc) { curc = [k, k]; comps.push(curc); } else curc[1] = k; } else curc = null; }
-      var s = lv.piles[c], reach = comps.some(function (cp) { return (s - 1 >= cp[0] && s - 1 <= cp[1]) || (s + 1 >= cp[0] && s + 1 <= cp[1]); });
-      var lb = comps.length - (reach ? 1 : 0); per.push(lb); total += lb;
-    }
-    return { total: total, per: per };
-  }
-  function build(p) { return p.mode === "bands" ? generateBands(p) : generate(p); }
+  function geo(st) { return GEO_CACHE[st.geoKey] || makeGeo(st.K, st.shape); }
 
   /* ================= 对局状态 ================= */
   function newGame(lv) {
-    var id = 0, st = { B: lv.B, W: !!lv.W, slackTotal: lv.slackTotal || 0, starLeft: lv.starLeft || null, phase: ENT, step: 0, belt: [], piles: [], cols: [], stocks: [],
-      wild: lv.wild != null ? lv.wild : 0,
-      stats: { plays: 0, direct: 0, beltIn: 0, beltLand: 0, draws: 0, maxChain: 0, beltPeak: 0, wilds: 0 } };
-    lv.piles.forEach(function (r, c) { st.piles.push({ c: c, r: r, stack: [id++] }); });
-    st.pileBase = lv.piles.map(function (r, c) { return { id: c, c: c, r: r }; });
-    lv.cols.forEach(function (col) { st.cols.push(col.map(function (x) { return { id: id++, c: x[0], r: x[1] }; })); });
+    var K = lv.piles.length, id = 0;
+    var st = { K: K, B: lv.B, W: !!lv.W, slackTotal: lv.slackTotal || 0, starLeft: lv.starLeft || null, step: 0, belt: [], piles: [], cols: [], stocks: [],
+      wild: lv.wild || 0, tray: lv.tray || 0, shape: lv.shape || null,
+      lock: lv.lock ? { col: lv.lock.col, open: false, c: null } : null,
+      stockLock: lv.stockLock ? { c: lv.stockLock.c, n: lv.stockLock.n, open: false } : null,
+      stats: { plays: 0, direct: 0, beltIn: 0, beltLand: 0, draws: 0, maxChain: 0, beltPeak: 0, wilds: 0, trays: 0, iceBreak: 0 } };
+    var g = makeGeo(K, lv.shape); st.geoKey = g.key; st.phase = g.ENT;
+    lv.piles.forEach(function (r, c) { st.piles.push({ c: c, r: r, stack: [id++], wild: false, dir: lv.dir ? (lv.dir[c] || 0) : 0 }); });
+    lv.cols.forEach(function (col) {
+      st.cols.push(col.map(function (x) {
+        var o = { id: id++, c: x[0], r: x[1] }, m = x[2];
+        if (m) { if (m.ice) o.ice = m.ice; if (m.key) { o.key = 1; if (st.lock) st.lock.c = x[0]; } }
+        return o;
+      }));
+    });
     lv.stocks.forEach(function (stk, c) { st.stocks.push(stk.map(function (r) { return { id: id++, c: c, r: r }; })); });
     st.total = id;
+    if (st.stockLock) checkStockLock(st);
     return st;
   }
-  function accept(st, card) { var p = st.piles[card.c]; return !!p.wild || adj(p.r, card.r, st.W); }
+  /* 快速复制（求解器、bot、撤回快照共用）：出牌区里只有带冰层的牌会被改，其余牌对象共享 */
+  function clone(st) {
+    var o = {}; for (var k in st) o[k] = st[k];
+    o.piles = st.piles.map(function (p) { return { c: p.c, r: p.r, stack: p.stack.slice(), wild: p.wild, dir: p.dir }; });
+    o.cols = st.cols.map(function (col) { return col.map(function (x) { return x.ice != null ? Object.assign({}, x) : x; }); });
+    o.stocks = st.stocks.map(function (s) { return s.slice(); });
+    o.belt = st.belt.map(function (b) { return Object.assign({}, b); });
+    o.stats = Object.assign({}, st.stats);
+    o.lock = st.lock ? Object.assign({}, st.lock) : null;
+    o.stockLock = st.stockLock ? Object.assign({}, st.stockLock) : null;
+    return o;
+  }
+
+  /* 接牌判定：同色；★ 堆接任意；定向堆只接 +dir；否则差 1 */
+  function fits(p, r, W) { if (p.wild) return true; if (p.dir) return r === p.r + p.dir; return adj(p.r, r, W); }
+  function accept(st, card) { return fits(st.piles[card.c], card.r, st.W); }
 
   function slotT(st, k) { return mod1(st.phase + k / st.B); }
   function emptySlots(st) { var u = {}, o = []; st.belt.forEach(function (c) { u[c.slot] = 1; }); for (var k = 0; k < st.B; k++) if (!u[k]) o.push(k); return o; }
   function alignDist(st) {
-    var best = 1;
+    var best = 1, ENT = geo(st).ENT;
     emptySlots(st).forEach(function (k) { var d = mod1(ENT - slotT(st, k)); if (d > 1 - EPS) d = 0; best = Math.min(best, d); });
     return best < EPS ? 0 : best;
   }
-  function entranceSlot(st) { var bk = -1, bd = 9; emptySlots(st).forEach(function (k) { var d = cdist(slotT(st, k), ENT); if (d < bd) { bd = d; bk = k; } }); return bk; }
+  function entranceSlot(st) { var bk = -1, bd = 9, ENT = geo(st).ENT; emptySlots(st).forEach(function (k) { var d = cdist(slotT(st, k), ENT); if (d < bd) { bd = d; bk = k; } }); return bk; }
   function advance(st, d) { st.phase = mod1(st.phase + d); st.belt.forEach(function (c) { c.t = slotT(st, c.slot); }); }
 
-  /* 原子操作（引擎与动画回放共用） */
-  function landFromCol(st, col) { var c = st.cols[col].pop(); var p = st.piles[c.c]; p.r = c.r; p.wild = false; p.stack.push(c.id); return c; }
-  function landFromBelt(st, id) {
-    for (var i = 0; i < st.belt.length; i++) if (st.belt[i].id === id) { var c = st.belt.splice(i, 1)[0]; var p = st.piles[c.c]; p.r = c.r; p.wild = false; p.stack.push(c.id); return c; }
+  /* ---------- 机制 ---------- */
+  function colorLeft(st, c) { var n = 0; st.cols.forEach(function (col) { col.forEach(function (x) { if (x.c === c) n++; }); }); return n; }
+  function checkStockLock(st) { var L = st.stockLock; if (L && !L.open && colorLeft(st, L.c) <= L.n) L.open = true; }
+  function stockLockNeed(st) { var L = st.stockLock; return L && !L.open ? colorLeft(st, L.c) - L.n : 0; }
+  function onLand(st, card) {
+    st.cols.forEach(function (col) { col.forEach(function (x) { if (x.ice > 0 && x.c === card.c) { x.ice--; if (!x.ice) st.stats.iceBreak++; } }); });
+    if (card.key && st.lock) st.lock.open = true;
   }
-  function toBelt(st, col) { var c = st.cols[col].pop(), k = entranceSlot(st); var b = { id: c.id, c: c.c, r: c.r, slot: k, t: slotT(st, k), placed: st.step }; st.belt.push(b); return b; }
+  function frozen(card) { return !!(card && card.ice > 0); }
+  function locked(st, col) { return !!(st.lock && !st.lock.open && st.lock.col === col); }
+
+  /* ---------- 原子操作（引擎与动画回放共用） ---------- */
+  function landFromBelt(st, id) {
+    for (var i = 0; i < st.belt.length; i++) if (st.belt[i].id === id) {
+      var c = st.belt.splice(i, 1)[0], p = st.piles[c.c]; p.r = c.r; p.wild = false; p.stack.push(c.id); onLand(st, c); return c;
+    }
+  }
+  function toBelt(st, col) {
+    var c = st.cols[col].pop(), k = entranceSlot(st);
+    var b = { id: c.id, c: c.c, r: c.r, slot: k, t: slotT(st, k), placed: st.step }; if (c.key) b.key = 1;
+    st.belt.push(b); checkStockLock(st); return b;
+  }
+  function drawRaw(st, c) { var x = st.stocks[c].pop(), p = st.piles[c]; p.r = x.r; p.wild = false; p.stack.push(x.id); return x; }
   function wildRaw(st, c) { st.wild--; st.stats.wilds++; var id = st.total + st.stats.wilds, p = st.piles[c]; p.wild = true; p.stack.push(id); return id; }
-  function drawRaw(st, c) { var x = st.stocks[c].pop(); var p = st.piles[c]; p.r = x.r; p.wild = false; p.stack.push(x.id); return x; }
+  /* 加托盘：B+1，带上的牌就近挪到新的等距托盘位（相位不变） */
+  function trayRaw(st) {
+    var oldT = st.belt.map(function (b) { return b.t; });
+    st.tray--; st.stats.trays++; st.B++;
+    var used = {};
+    st.belt.map(function (b, i) { return i; }).sort(function (a, b) { return oldT[a] - oldT[b]; }).forEach(function (i) {
+      var b = st.belt[i], bk = -1, bd = 9;
+      for (var k = 0; k < st.B; k++) { if (used[k]) continue; var d = cdist(slotT(st, k), oldT[i]); if (d < bd) { bd = d; bk = k; } }
+      used[bk] = 1; b.slot = bk; b.t = slotT(st, bk);
+    });
+  }
 
   function resolve(st, ev) {
-    var chain = 0;
+    var chain = 0, G = geo(st).gates;
     for (var guard = 0; guard < 2000; guard++) {
       var d = Infinity;
-      st.belt.forEach(function (c) { if (accept(st, c)) { var g = mod1(GATES[c.c] - c.t); if (g > 1 - 1e-6) g = 0; d = Math.min(d, g); } });
+      st.belt.forEach(function (c) { if (accept(st, c)) { var g = mod1(G[c.c] - c.t); if (g > 1 - 1e-6) g = 0; d = Math.min(d, g); } });
       if (d === Infinity) break;
       if (d > 1e-6) { advance(st, d); ev.push({ type: "move", d: d }); }
       var hit = null;
-      for (var j = 0; j < st.belt.length; j++) { var c = st.belt[j]; if (cdist(c.t, GATES[c.c]) < 1e-6 && accept(st, c)) { hit = c; break; } }
+      for (var j = 0; j < st.belt.length; j++) { var c = st.belt[j]; if (cdist(c.t, G[c.c]) < 1e-6 && accept(st, c)) { hit = c; break; } }
       if (!hit) break;
       landFromBelt(st, hit.id); chain++; st.stats.beltLand++;
       ev.push({ type: "land", id: hit.id, pile: hit.c, from: "belt" });
@@ -369,23 +353,31 @@ var ENGINE3 = (function () {
 
   function colsLeft(st) { return st.cols.some(function (c) { return c.length; }); }
   function stockLeft(st) { return st.stocks.reduce(function (n, s) { return n + s.length; }, 0); }
-  function canPlay(st, col) { var c = st.cols[col]; return !!(c && c.length) && st.belt.length < st.B; }
+  /* 能不能点这一列：列不空、带上有空托盘、列顶没冻住、这一列没被锁 */
+  function canPlay(st, col) { var c = st.cols[col]; return !!(c && c.length) && st.belt.length < st.B && !frozen(c[c.length - 1]) && !locked(st, col); }
+  function whyNotPlay(st, col) {
+    var c = st.cols[col]; if (!c || !c.length) return "empty";
+    if (locked(st, col)) return "locked"; if (frozen(c[c.length - 1])) return "ice"; if (st.belt.length >= st.B) return "full"; return null;
+  }
+  function stockLocked(st, c) { return !!(st.stockLock && !st.stockLock.open && st.stockLock.c === c); }
+  function canDraw(st, c) { return !!(st.stocks[c] && st.stocks[c].length) && !stockLocked(st, c); }
+  function starOf(st, left) {
+    var sv;
+    if (st.starLeft) sv = left >= st.starLeft[1] ? 3 : left >= st.starLeft[0] ? 2 : 1;
+    else { var full = st.slackTotal || 6; sv = left >= full ? 3 : left >= Math.ceil(full / 2) ? 2 : 1; }
+    var capped = !!(st.stats.wilds || st.stats.trays);
+    return { stars: capped ? Math.min(2, sv) : sv, capped: capped };
+  }
   function status(st) {
-    if (!colsLeft(st) && !st.belt.length) {
-      var left = stockLeft(st);
-      // [PLACEHOLDER] 星级仅标记：剩余补牌 ≥ 富余总数（= 没比解多翻）3★；≥ 一半 2★；其余 1★
-      // v4：每关按实测分布标定 starLeft=[2★所需剩余, 3★所需剩余]；旧关卡仍按富余张数
-      if (st.starLeft) { var sv = left >= st.starLeft[1] ? 3 : left >= st.starLeft[0] ? 2 : 1; if (st.stats.wilds) sv = Math.min(sv, 2); return { state: "win", stockLeft: left, stars: sv, wildCap: !!st.stats.wilds }; }
-      var full = st.slackTotal || 6;
-      return { state: "win", stockLeft: left, stars: left >= full ? 3 : left >= Math.ceil(full / 2) ? 2 : 1 };
-    }
+    if (!colsLeft(st) && !st.belt.length) { var left = stockLeft(st), s = starOf(st, left); return { state: "win", stockLeft: left, stars: s.stars, propCap: s.capped }; }
     for (var i = 0; i < st.cols.length; i++) if (canPlay(st, i)) return { state: "play" };
-    if (stockLeft(st)) return { state: "play" };
+    for (var c = 0; c < st.K; c++) if (canDraw(st, c)) return { state: "play" };
     if (st.wild > 0 && (st.belt.length || colsLeft(st))) return { state: "play" };
-    return { state: "lose", why: st.belt.length >= st.B ? "full" : "dry" };
+    if (st.tray > 0 && st.belt.length >= st.B && colsLeft(st)) return { state: "play" };
+    return { state: "lose", why: st.belt.length >= st.B ? "full" : stockLeft(st) ? "blocked" : "dry" };
   }
 
-  /* 玩家动作 */
+  /* ---------- 玩家动作 ---------- */
   function play(st, col) {
     if (!canPlay(st, col)) return null;
     var top = st.cols[col][st.cols[col].length - 1], ev = [];
@@ -402,64 +394,49 @@ var ENGINE3 = (function () {
     ev.chain = ch; ev.landedSelf = landedSelf;
     return ev;
   }
-  /* 万能牌道具（10-28 michael）：玩家手动把它拖到任意一个归牌堆，盖住堆顶 → 堆顶变成 ★。
-   * ★ 堆顶可以接这一色的任意点数（下一张）；接上后恢复普通 ±1 规则。翻补牌盖上去也会把 ★ 盖掉。
-   * 不计入翻补牌数；用过万能牌的局最高 2★。 */
-  function useWild(st, c) {
-    if (!(st.wild > 0) || c < 0 || c > 2) return null;
-    st.step++;
-    var id = wildRaw(st, c), ev = [{ type: "wild", pile: c, id: id }];
-    var ch = resolve(st, ev); st.stats.maxChain = Math.max(st.stats.maxChain, ch); ev.chain = ch;
-    return ev;
-  }
   function draw(st, c) {
-    if (!st.stocks[c] || !st.stocks[c].length) return null;
+    if (!canDraw(st, c)) return null;
     st.step++; st.stats.draws++;
     var x = drawRaw(st, c), ev = [{ type: "draw", id: x.id, pile: c }];
     var ch = resolve(st, ev); st.stats.maxChain = Math.max(st.stats.maxChain, ch); ev.chain = ch;
     return ev;
   }
+  function useWild(st, c) {
+    if (!(st.wild > 0) || c < 0 || c >= st.K) return null;
+    st.step++;
+    var id = wildRaw(st, c), ev = [{ type: "wild", pile: c, id: id }];
+    var ch = resolve(st, ev); st.stats.maxChain = Math.max(st.stats.maxChain, ch); ev.chain = ch;
+    return ev;
+  }
+  function useTray(st) {
+    if (!(st.tray > 0)) return null;
+    st.step++; trayRaw(st);
+    return [{ type: "tray", B: st.B }];
+  }
 
-  /* ================= Bot（只看明牌：各列顶张、带上牌、堆顶、各叠顶张） ================= */
+  /* ================= 简易 bot（界面“bot 估测”用；正式评估在 lab5/bots5.js） ================= */
   function botMove(st, kind, r) {
-    var L = [], digs = [], room = st.belt.length < st.B;
-    st.cols.forEach(function (col, i) { if (!col.length || !room) return; var t = col[col.length - 1]; if (accept(st, t)) L.push(i); else digs.push(i); });
-    if (L.length) {
-      if (kind === "random") return ["p", L[Math.floor(r() * L.length)]];
-      var best = L[0], bv = -1e9;
-      L.forEach(function (i) {
-        var t = st.cols[i][st.cols[i].length - 1], v = r() * .3;
-        st.belt.forEach(function (b) { if (b.c === t.c && adj(b.r, t.r, st.W)) v += 2; });
-        st.cols.forEach(function (col, j) { if (j !== i && col.length) { var u = col[col.length - 1]; if (u.c === t.c && adj(u.r, t.r, st.W)) v += 1; } });
-        if (v > bv) { bv = v; best = i; }
-      });
-      return ["p", best];
-    }
-    var stk = [0, 1, 2].filter(function (c) { return st.stocks[c].length; });
-    var canDig = digs.length && st.belt.length < st.B;
+    var L = [], digs = [];
+    st.cols.forEach(function (col, i) { if (!canPlay(st, i)) return; var t = col[col.length - 1]; if (accept(st, t)) L.push(i); else digs.push(i); });
+    var stk = []; for (var c = 0; c < st.K; c++) if (canDraw(st, c)) stk.push(c);
+    if (L.length) return ["p", L[Math.floor(r() * L.length)]];
     if (kind === "random") {
-      var opts = []; if (canDig) opts.push("dig"); if (stk.length) opts.push("draw");
+      var opts = []; if (digs.length) opts.push("dig"); if (stk.length) opts.push("draw");
       if (!opts.length) return null;
-      if (opts[Math.floor(r() * opts.length)] === "dig") return ["p", digs[Math.floor(r() * digs.length)]];
-      return ["d", stk[Math.floor(r() * stk.length)]];
+      return opts[Math.floor(r() * opts.length)] === "dig" ? ["p", digs[Math.floor(r() * digs.length)]] : ["d", stk[Math.floor(r() * stk.length)]];
     }
-    // smart：先看翻哪叠能立刻接上最多（明牌顶）；没有收益且带位宽裕才挖
     var bestC = -1, bestV = -1;
     stk.forEach(function (c) {
-      var t = st.stocks[c][st.stocks[c].length - 1], v = 0;
-      st.belt.forEach(function (b) { if (b.c === c && adj(b.r, t.r, st.W)) v += 2; });
-      st.cols.forEach(function (col) { if (col.length) { var u = col[col.length - 1]; if (u.c === c && adj(u.r, t.r, st.W)) v += 1.5; } });
+      var t = st.stocks[c][st.stocks[c].length - 1], p = { r: t.r, dir: st.piles[c].dir }, v = 0;
+      st.belt.forEach(function (b) { if (b.c === c && fits(p, b.r, st.W)) v += 2; });
+      st.cols.forEach(function (col) { if (col.length) { var u = col[col.length - 1]; if (u.c === c && fits(p, u.r, st.W)) v += 1.5; } });
       v += st.stocks[c].length * .05 + r() * .1;
       if (v > bestV) { bestV = v; bestC = c; }
     });
     if (bestC >= 0 && bestV >= 1) return ["d", bestC];
-    if (canDig && (st.belt.length < st.B - 1 || bestC < 0)) {
-      var di = digs[0], dv = 1e9;
-      digs.forEach(function (i) { var t = st.cols[i][st.cols[i].length - 1]; var v = Math.abs(st.piles[t.c].r - t.r) - st.cols[i].length * .2 + r() * .1; if (v < dv) { dv = v; di = i; } });
-      return ["p", di];
-    }
+    if (digs.length && (st.belt.length < st.B - 1 || bestC < 0)) return ["p", digs[Math.floor(r() * digs.length)]];
     if (bestC >= 0) return ["d", bestC];
-    if (canDig) return ["p", digs[0]];
+    if (digs.length) return ["p", digs[0]];
     return null;
   }
   function botRun(lv, kind, seed) {
@@ -476,26 +453,26 @@ var ENGINE3 = (function () {
     for (var i = 0; i < runs; i++) { var x = botRun(lv, kind, 1000 + i * 7919); if (x.win) { w++; if (x.stars === 3) s3++; } d += x.st.stats.draws; }
     return { rate: w / runs, star3: s3 / runs, draws: d / runs };
   }
-  /* 回放生成器的解，验证“保证有解”（零带位） */
-  function verify(lv) {
+  /* 回放关卡文件里的解（{col} / {draw}），要求每步都合法、最终获胜 */
+  function replay(lv, sol) {
     var st = newGame(lv);
-    for (var i = 0; i < lv.solution.length; i++) {
-      var e = lv.solution[i];
-      if (e.draw != null) { if (!draw(st, e.draw)) return false; continue; }
-      var cl = st.cols[e.col], t = cl && cl[cl.length - 1];
-      if (!t || t.c !== e.land || t.r !== e.r || !accept(st, t)) return false;
-      play(st, e.col);
+    for (var i = 0; i < sol.length; i++) {
+      var e = sol[i], ok = e.draw != null ? draw(st, e.draw) : play(st, e.col);
+      if (!ok) return { ok: false, at: i, why: e.draw != null ? "draw" : whyNotPlay(st, e.col), st: st };
     }
-    return status(st).state === "win" && st.stats.beltIn === 0;
+    var s = status(st); return { ok: s.state === "win", st: st, status: s };
   }
 
-  return { GEO: GEO, rng: rng, generate: generate, generateBands: generateBands, build: build, drawLowerBound: drawLowerBound, newGame: newGame, status: status, play: play, draw: draw, useWild: useWild, accept: accept,
-    advance: advance, landFromCol: landFromCol, landFromBelt: landFromBelt, toBelt: toBelt, drawRaw: drawRaw, wildRaw: wildRaw, slotT: slotT,
-    stockLeft: stockLeft, canPlay: canPlay, botRun: botRun, botRate: botRate, verify: verify, adj: adj };
+  return { rng: rng, adj: adj, makeGeo: makeGeo, geo: geo, newGame: newGame, clone: clone, fits: fits, accept: accept, status: status,
+    play: play, draw: draw, useWild: useWild, useTray: useTray, canPlay: canPlay, canDraw: canDraw, whyNotPlay: whyNotPlay,
+    stockLocked: stockLocked, stockLockNeed: stockLockNeed, colorLeft: colorLeft, locked: locked, frozen: frozen,
+    advance: advance, landFromBelt: landFromBelt, toBelt: toBelt, drawRaw: drawRaw, wildRaw: wildRaw, trayRaw: trayRaw, slotT: slotT,
+    stockLeft: stockLeft, colsLeft: colsLeft, botRun: botRun, botRate: botRate, replay: replay };
 })();
-if (typeof module !== "undefined") module.exports = ENGINE3;
+if (typeof module !== "undefined") module.exports = ENGINE5;
 
-/* Solitaire Flow · 关卡生成器 v4（“行走”生成器）
+/* Solitaire Flow · 关卡生成器 v5（由 v4“行走”生成器扩展：颜色数可变 p.K；定向堆 p.dir=[..]，该色每段行走只朝一个方向走）
+ * v4 的 gen4.js 原样保留。以下为 v4 原说明：
  * 思路：每种颜色的堆顶是一条 ±1 的“行走”。一次补牌 = 一次瞬移，开始一段新行走。
  *   每色设计 K 段行走（第 1 段从起始堆顶出发，其余各段从一张补牌出发），每段行走的点数序列就是这一色要接的牌。
  *
@@ -513,9 +490,9 @@ if (typeof module !== "undefined") module.exports = ENGINE3;
  * 四、补牌叠：解要用的瞬移牌在上（按使用顺序），富余牌垫底；富余牌按“救场价值”挑点数（与这一色牌多的区域相邻），不是随机。
  * 五、生成后用真实引擎回放整条解（含预挖、带上自动落），逐步核对堆顶 ⇒ 保证有解。
  */
-var GEN4 = (function () {
+var GEN5 = (function () {
   "use strict";
-  var E = (typeof ENGINE3 !== "undefined") ? ENGINE3 : require("./engine3.js");
+  var E = (typeof ENGINE5 !== "undefined") ? ENGINE5 : require("./engine5.js");
   var rng = E.rng;
   function shuffle(a, r) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function ri(r, a, b) { return a + Math.floor(r() * (b - a + 1)); }
@@ -539,10 +516,11 @@ var GEN4 = (function () {
     }
     return w;
   }
+  function walkDir(start, L, dir) { var w = []; for (var i = 1; i <= L; i++) { var k = start + dir * i; if (k < 1 || k > 13) return null; w.push(k); } return w; }
   /* 奇偶下界（对任何关卡都成立）：按点数连通段统计“奇偶差”，每段至少 max(1,|差|) 段行走；起始堆顶若同奇偶且相邻可省 1 段 */
   function lowerBound(lv) {
     var per = [], total = 0;
-    for (var c = 0; c < 3; c++) {
+    for (var c = 0; c < lv.piles.length; c++) {
       var n = []; for (var k = 0; k <= 14; k++) n.push(0);
       lv.cols.forEach(function (col) { col.forEach(function (x) { if (x[0] === c) n[x[1]]++; }); });
       var comps = [], cur = null;
@@ -562,11 +540,13 @@ var GEN4 = (function () {
    *      dig 预挖概率, ahead 最远预挖几步, digCap 带上最多同时等几张, stay 同色连续概率, overlap 新行走落在老区域的概率,
    *      reveal 列分配的“提前可见”程度(0=按顺序轮流,1=完全随机), seed } */
   function generate(p) {
-    var r = rng(p.seed), C = 3;
+    var r = rng(p.seed), C = p.K || 3, DIR = p.dir || [];
+    function zeros() { var a = []; for (var i = 0; i < C; i++) a.push(0); return a; }
     // 1) 每色行走数与张数
-    var Dc = [0, 0, 0]; for (var d = 0; d < p.D; d++) Dc[d % 3]++; shuffle(Dc, r);
+    var Dc = zeros(); for (var d = 0; d < p.D; d++) Dc[d % C]++; shuffle(Dc, r);
+    if (p.dirDraws != null) for (var dc = 0; dc < C; dc++) if (DIR[dc] && Dc[dc] < p.dirDraws) { var from = Dc.indexOf(Math.max.apply(null, Dc)); if (from !== dc && Dc[from] > 0) { Dc[from]--; Dc[dc]++; } }
     var K = Dc.map(function (x) { return x + 1; });
-    var Tc = [0, 0, 0], base = Math.floor(p.T / 3);
+    var Tc = zeros(), base = Math.floor(p.T / C);
     for (var c = 0; c < C; c++) { Tc[c] = base + ri(r, -1, 1); if ((Tc[c] - K[c]) % 2) Tc[c]++; Tc[c] = Math.max(Tc[c], K[c] * p.len[0]); if ((Tc[c] - K[c]) % 2) Tc[c]++; }
     var plan = [];
     for (c = 0; c < C; c++) {
@@ -574,18 +554,25 @@ var GEN4 = (function () {
       var lens = oddLengths(K[c], Tc[c], p.len[0], p.len[1], r);
       if (!lens) return null;
       var walks = [], starts = [], seen = {};
+      var dirc = DIR[c] || 0;
       var s0 = ri(r, 2, 12); if (s0 % 2 !== par) s0 += (s0 < 12 ? 1 : -1);
+      if (dirc) { var hiS = dirc > 0 ? 13 - lens[0] : 13, loS = dirc > 0 ? 1 : 1 + lens[0]; if (hiS < loS) return null; s0 = ri(r, loS, hiS); if (s0 % 2 !== par) s0 += s0 + 1 <= hiS ? 1 : -1; if (s0 < loS || s0 > hiS) return null; }
       for (var k = 0; k < K[c]; k++) {
         var st;
         if (k === 0) st = s0;
-        else {
+        else if (dirc) {
+          var hi2 = dirc > 0 ? 13 - lens[k] : 13, lo2 = dirc > 0 ? 1 : 1 + lens[k]; if (hi2 < lo2) return null;
+          var region2 = Object.keys(seen).map(Number).filter(function (x) { return x - 1 >= lo2 && x - 1 <= hi2; });
+          st = region2.length && r() < p.overlap ? region2[Math.floor(r() * region2.length)] - 1 : ri(r, lo2, hi2);
+          if (st % 2 !== par) st += st + 1 <= hi2 ? 1 : -1; if (st < lo2 || st > hi2) return null;
+        } else {
           var region = Object.keys(seen).map(Number);
           if (region.length && r() < p.overlap) { st = region[Math.floor(r() * region.length)] + (r() < .5 ? -1 : 1); }
           else st = ri(r, 2, 12);
           if (st % 2 !== par) st += (st < 12 ? 1 : -1);
           st = Math.max(1, Math.min(13, st)); if (st % 2 !== par) st += st < 13 ? 1 : -1;
         }
-        var w = null; for (var tries = 0; tries < 20 && !w; tries++) w = walk(st, lens[k], r, p.keep, 1, 13);
+        var w = null; for (var tries = 0; tries < 20 && !w; tries++) w = dirc ? walkDir(st, lens[k], dirc) : walk(st, lens[k], r, p.keep, 1, 13);
         if (!w) return null;
         w.forEach(function (x) { seen[x] = 1; });
         walks.push(w); starts.push(st);
@@ -602,7 +589,7 @@ var GEN4 = (function () {
       if (belt.length >= p.digCap) return o;
       for (var j = pc.pos + 2; j <= Math.min(w.length - 1, pc.pos + 1 + p.ahead); j++) {
         if (pc.taken[j]) continue;
-        if (Math.abs(w[j] - pc.P) === 1) continue;            // 现在就能落 → 不是预挖
+        if (DIR[c] ? w[j] === pc.P + DIR[c] : Math.abs(w[j] - pc.P) === 1) continue;            // 现在就能落 → 不是预挖
         var ok = true;
         for (var q = pc.pos + 1; q <= j - 2; q++) if (Math.abs(w[q] - w[j]) === 1) { ok = false; break; }   // 会提前落
         if (ok) o.push(j);
@@ -686,17 +673,18 @@ var GEN4 = (function () {
     var cols = []; for (m = 0; m < M; m++) cols.push([]);
     for (var i = takes.length - 1; i >= 0; i--) cols[takes[i].col].push([takes[i].c, takes[i].r]);
     // 4) 补牌叠：解用的瞬移牌在上；富余牌挑“救场价值”高的点数（同奇偶，与本色牌多的点数相邻）垫底
-    var stocks = [[], [], []];
+    var stocks = []; for (c = 0; c < C; c++) stocks.push([]);
     for (c = 0; c < C; c++) {
       var dens = []; for (k = 0; k <= 14; k++) dens.push(0);
       takes.forEach(function (a) { if (a.c === c) dens[a.r]++; });
       var cand2 = []; for (k = 1; k <= 13; k++) if (k % 2 === plan[c].par) cand2.push([k, (dens[k - 1] || 0) + (dens[k + 1] || 0) + r() * .5]);
+      if (DIR[c]) { cand2 = []; for (k = 1; k <= 13; k++) if (dens[k + DIR[c]]) cand2.push([k, dens[k + DIR[c]] * 2 + (dens[k + 2 * DIR[c]] || 0) - (dens[k] || 0) * .5 + r() * .3]); }   // 定向堆：富余补牌挑“正好在牌下面一格”的点数，能接上一整段
       cand2.sort(function (a, b) { return b[1] - a[1]; });
       var nslack = p.slackPer ? p.slackPer[c] : p.slack;
       if (p.slackAlloc && !p.slackPer) {          // 富余总数 = slack×3，按每色需要翻的次数分配
-        var totS = p.slack * 3, w = Dc.map(function (x) { return p.slackAlloc === "prop" ? x + .5 : 1 / (x + .5); }), ws = w[0] + w[1] + w[2];
-        var alloc = w.map(function (x) { return Math.floor(totS * x / ws); }), rem = totS - alloc[0] - alloc[1] - alloc[2];
-        var ord = [0, 1, 2].sort(function (a, b) { return (totS * w[b] / ws - alloc[b]) - (totS * w[a] / ws - alloc[a]); });
+        var totS = p.slack * C, w = Dc.map(function (x) { return p.slackAlloc === "prop" ? x + .5 : 1 / (x + .5); }), ws = w.reduce(function (a, b) { return a + b; }, 0);
+        var alloc = w.map(function (x) { return Math.floor(totS * x / ws); }), rem = totS - alloc.reduce(function (a, b) { return a + b; }, 0);
+        var ord = Dc.map(function (x, i) { return i; }).sort(function (a, b) { return (totS * w[b] / ws - alloc[b]) - (totS * w[a] / ws - alloc[a]); });
         for (var q2 = 0; q2 < rem; q2++) alloc[ord[q2]]++;
         nslack = alloc[c];
       }
@@ -713,7 +701,9 @@ var GEN4 = (function () {
       for (var y = tel.length - 1; y >= 0; y--) stocks[c].push(tel[y]);
     }
     var lv = { piles: plan.map(function (pc) { return pc.walks.length ? pc.starts[0] : 7; }), cols: cols, stocks: stocks, B: p.B, M: M, W: false, seed: p.seed,
-      slackTotal: p.slackPer ? p.slackPer.reduce(function (a, b) { return a + b; }, 0) : p.slack * 3, solution: acts, gen: "walk4" };
+      slackTotal: p.slackPer ? p.slackPer.reduce(function (a, b) { return a + b; }, 0) : p.slack * C, solution: acts, gen: "walk5" };
+    if (DIR.some(function (x) { return x; })) { lv.dir = []; for (c = 0; c < C; c++) lv.dir.push(DIR[c] || 0); }
+    if (p.shape) lv.shape = p.shape;
     var lb = lowerBound(lv);
     lv.minDraws = lb.total; lv.lbPer = lb.per; lv.solDraws = acts.filter(function (a) { return a.t === "draw"; }).length;
     lv.exact = lv.minDraws === lv.solDraws;
@@ -730,7 +720,7 @@ var GEN4 = (function () {
         if (!t || t.c !== a.c || t.r !== a.r) return { ok: false, at: i, why: "top" };
         if (!E.play(st, a.col)) return { ok: false, at: i, why: "full" };
       }
-      for (var c = 0; c < 3; c++) if (st.piles[c].r !== a.P[c]) return { ok: false, at: i, why: "pile" };
+      for (var c = 0; c < st.K; c++) if (st.piles[c].r !== a.P[c]) return { ok: false, at: i, why: "pile" };
     }
     var s = E.status(st);
     return { ok: s.state === "win", why: s.state, beltPeak: st.stats.beltPeak, beltLand: st.stats.beltLand };
@@ -741,17 +731,17 @@ var GEN4 = (function () {
    *   blind = 解要翻补牌时，正确那叠的顶牌翻开后，明牌里却没有任何牌能马上落（玩家看不出该翻哪叠）
    *   open  = 开局能直接落的列顶数 */
   function analyze(lv) {
-    var st = E.newGame(lv), traps = {}, amb = 0, blind = 0, open = 0, plan = [null, null, null];
+    var st = E.newGame(lv), traps = {}, amb = 0, blind = 0, open = 0, KC = lv.piles.length;
     // 每色“下一张要落的牌”：从解里预先算出
     var nextLand = [];
     for (var i = 0; i < lv.solution.length; i++) {
-      var need = [null, null, null];
+      var need = []; for (var z = 0; z < KC; z++) need.push(null);
       for (var j = i; j < lv.solution.length; j++) { var a = lv.solution[j]; if (a.t === "draw") { if (need[a.c] === null) need[a.c] = "draw"; } else if (!a.dig && need[a.c] === null) need[a.c] = a.r; if (need.every(function (x) { return x !== null; })) break; }
       nextLand.push(need);
     }
     function visibleEnables(c, rank) {
-      var n = 0; st.belt.forEach(function (b) { if (b.c === c && Math.abs(b.r - rank) === 1) n++; });
-      st.cols.forEach(function (col) { var u = col[col.length - 1]; if (u && u.c === c && Math.abs(u.r - rank) === 1) n++; });
+      var n = 0, pp = { r: rank, dir: st.piles[c].dir }; st.belt.forEach(function (b) { if (b.c === c && E.fits(pp, b.r)) n++; });
+      st.cols.forEach(function (col) { var u = col[col.length - 1]; if (u && u.c === c && E.fits(pp, u.r)) n++; });
       return n;
     }
     for (i = 0; i < lv.solution.length; i++) {
@@ -764,7 +754,7 @@ var GEN4 = (function () {
       if (a2.t === "draw") {
         var good = visibleEnables(a2.c, st.stocks[a2.c][st.stocks[a2.c].length - 1].r);
         if (!good) blind++;
-        for (var c = 0; c < 3; c++) if (c !== a2.c && st.stocks[c].length && visibleEnables(c, st.stocks[c][st.stocks[c].length - 1].r)) amb++;
+        for (var c = 0; c < KC; c++) if (c !== a2.c && st.stocks[c].length && visibleEnables(c, st.stocks[c][st.stocks[c].length - 1].r)) amb++;
         E.draw(st, a2.c);
       } else E.play(st, a2.col);
     }
@@ -774,11 +764,14 @@ var GEN4 = (function () {
    * 则一旦离开这段（翻了该色补牌）就再也回不来 → 翻早一张补牌即死局。v4.1 起作为硬约束拒绝。 */
   function isolated(lv) {
     var out = [];
-    for (var c = 0; c < 3; c++) {
-      var has = {}; lv.cols.forEach(function (col) { col.forEach(function (x) { if (x[0] === c) has[x[1]] = (has[x[1]] || 0) + 1; }); });
+    for (var c = 0; c < lv.piles.length; c++) {
+      var has = {}, dirc = lv.dir ? lv.dir[c] : 0; lv.cols.forEach(function (col) { col.forEach(function (x) { if (x[0] === c) has[x[1]] = (has[x[1]] || 0) + 1; }); });
       var comps = [], cur = null;
       for (var k = 1; k <= 13; k++) { if (has[k]) { if (!cur) { cur = { lo: k, hi: k, n: 0 }; comps.push(cur); } cur.hi = k; cur.n += has[k]; } else cur = null; }
-      comps.forEach(function (cp) { if (!lv.stocks[c].some(function (r) { return r >= cp.lo - 1 && r <= cp.hi + 1; })) out.push({ c: c, lo: cp.lo, hi: cp.hi, n: cp.n }); });
+      comps.forEach(function (cp) {
+        var enter = dirc > 0 ? function (r) { return r === cp.lo - 1; } : dirc < 0 ? function (r) { return r === cp.hi + 1; } : function (r) { return r >= cp.lo - 1 && r <= cp.hi + 1; };   // 定向堆只能从段的起点下面一格进入
+        if (!lv.stocks[c].some(enter)) out.push({ c: c, lo: cp.lo, hi: cp.hi, n: cp.n });
+      });
     }
     return out;
   }
@@ -801,40 +794,61 @@ var GEN4 = (function () {
   }
   return { generate: generate, verify: verify, build: build, lowerBound: lowerBound, analyze: analyze, isolated: isolated };
 })();
-if (typeof module !== "undefined") module.exports = GEN4;
+if (typeof module !== "undefined") module.exports = GEN5;
 
 </script>
 <script>
-var LEVELS = [{"n":1,"name":"教学·接龙与补牌","minDraws":2,"exact":true,"data":{"piles":[2,4,11],"cols":[[[2,11],[1,3],[0,2],[0,4],[0,3],[1,3]],[[1,6],[2,12]],[[1,6],[1,5],[0,5],[0,3],[2,12],[1,2]],[[1,7],[2,12],[2,12],[1,1],[1,2]],[[1,5],[2,13],[2,12],[0,4],[2,13],[0,3]]],"stocks":[[4,2],[2,4,4],[13,11,11]],"B":5,"M":5,"W":false,"slackTotal":6,"starLeft":[3,4],"seed":1056},"gen":{"keep":0.7,"len":[3,7],"dig":0,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","T":24,"D":2,"slack":2,"B":5,"M":5,"digCap":4,"seed":1056},"eval":{"P1":1,"P3":0.94,"N":0.77,"G":0.59,"raw":{"P1":1,"K":1,"P3":0.98,"M":0.89,"N":0.77,"G":0.59},"star3P1":0.72},"solution":[{"col":0},{"col":3},{"col":0},{"col":0},{"col":4},{"col":3},{"col":2},{"col":2},{"col":4},{"col":0},{"col":0},{"col":2},{"col":4},{"col":3},{"col":2},{"draw":2},{"col":3},{"col":0},{"col":4},{"col":4},{"col":1},{"draw":1},{"col":2},{"col":1},{"col":4},{"col":2},{"col":3}]},{"n":2,"name":"进阶·传送带","minDraws":5,"exact":true,"data":{"piles":[3,5,6],"cols":[[[1,6],[1,6],[0,7],[2,8],[2,9],[0,6],[0,5],[2,7]],[[1,12],[1,13],[1,7],[1,8],[1,9],[1,8],[1,6]],[[0,9],[0,10],[0,6],[0,4],[2,8]],[[1,12],[0,8],[0,6],[0,4],[0,5],[2,9]],[[2,8],[2,9],[2,9],[1,7],[2,10],[2,11]]],"stocks":[[7,5,7,5],[5,7,11,9],[8,10,10]],"B":5,"M":5,"W":false,"slackTotal":6,"starLeft":[4,5],"seed":2404},"gen":{"keep":0.7,"len":[3,7],"dig":0.25,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","T":30,"D":5,"slack":2,"B":5,"M":5,"digCap":4,"seed":2404},"eval":{"P1":0.93,"P3":0.74,"N":0.6,"G":0.29,"raw":{"P1":0.97,"K":0.89,"P3":0.83,"M":0.64,"N":0.6,"G":0.29},"star3P1":0.56},"solution":[{"col":0},{"col":2},{"col":3},{"col":4},{"col":4},{"col":2},{"col":0},{"col":0},{"draw":0},{"col":4},{"col":3},{"col":1},{"draw":2},{"col":4},{"col":0},{"col":0},{"col":4},{"col":3},{"col":3},{"col":2},{"col":0},{"col":0},{"col":4},{"draw":1},{"col":1},{"col":1},{"draw":0},{"col":1},{"col":1},{"col":0},{"col":3},{"col":2},{"draw":1},{"col":1},{"col":2},{"col":1},{"col":3}]},{"n":3,"name":"常规·三色并行","minDraws":6,"exact":true,"data":{"piles":[11,4,3],"cols":[[[0,2],[0,7],[1,7],[1,5],[2,2],[0,10]],[[2,4],[2,3],[1,6],[0,12]],[[0,10],[0,9],[2,3],[2,2],[1,5],[1,4],[1,3],[1,3]],[[2,2],[0,2],[0,1],[0,6],[2,4],[0,11],[2,3]],[[0,8],[2,1],[2,2],[1,6],[1,5],[1,6],[1,7],[2,4]]],"stocks":[[11,9,3,11],[6,4,4,4],[3,1,5,3]],"B":5,"M":5,"W":false,"slackTotal":6,"starLeft":[3,5],"seed":3576},"gen":{"keep":0.7,"len":[3,7],"dig":0.25,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","T":32,"D":6,"slack":2,"B":5,"M":5,"digCap":4,"seed":3576},"eval":{"P1":0.84,"P3":0.68,"N":0.49,"G":0.03,"raw":{"P1":0.85,"K":0.83,"P3":0.75,"M":0.61,"N":0.49,"G":0.03},"star3P1":0.47},"solution":[{"col":3},{"col":2},{"col":2},{"col":2},{"draw":1},{"col":2},{"col":4},{"col":3},{"col":2},{"col":4},{"col":4},{"col":4},{"col":4},{"col":1},{"col":0},{"draw":2},{"draw":1},{"col":0},{"col":4},{"col":4},{"col":2},{"col":1},{"col":3},{"col":0},{"draw":2},{"draw":0},{"col":2},{"col":1},{"col":0},{"col":2},{"col":4},{"col":0},{"col":3},{"draw":0},{"col":3},{"col":3},{"col":0},{"col":1},{"col":3}]},{"n":4,"name":"常规·补牌更紧","minDraws":7,"exact":true,"data":{"piles":[9,9,3],"cols":[[[0,10],[0,10],[2,11],[2,4],[2,3],[0,7],[0,8],[1,10]],[[0,9],[0,8],[0,7],[0,8],[2,12],[1,8],[1,11],[1,9],[2,4]],[[0,6],[2,12],[2,12],[0,8]],[[0,9],[2,13],[2,2],[1,8],[1,9],[1,10],[1,10],[1,11]],[[0,8],[1,9],[1,10],[1,8],[1,8],[2,5],[2,6]]],"stocks":[[9,7,11,5,9],[9,7,11,9],[3,13,11,5]],"B":5,"M":5,"W":false,"slackTotal":6,"starLeft":[2,3],"seed":4094},"gen":{"keep":0.7,"len":[3,7],"dig":0.25,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","T":36,"D":7,"slack":2,"B":5,"M":5,"digCap":4,"seed":4094},"eval":{"P1":0.71,"P3":0.46,"N":0.34,"G":0,"raw":{"P1":0.7,"K":0.72,"P3":0.52,"M":0.4,"N":0.34,"G":0},"star3P1":0.51},"solution":[{"col":1},{"col":3},{"col":4},{"col":2},{"col":3},{"col":0},{"col":4},{"col":0},{"draw":1},{"col":4},{"col":1},{"col":4},{"col":0},{"draw":1},{"col":4},{"col":1},{"col":3},{"col":3},{"col":3},{"col":4},{"col":1},{"draw":2},{"col":0},{"col":0},{"col":3},{"draw":2},{"col":1},{"col":2},{"col":3},{"col":0},{"col":2},{"draw":0},{"col":4},{"col":3},{"col":0},{"draw":0},{"col":2},{"col":1},{"col":1},{"draw":0},{"col":0},{"col":1},{"col":1}]},{"n":5,"name":"挑战·每叠只富余 1","minDraws":7,"exact":true,"data":{"piles":[7,3,6],"cols":[[[0,9],[1,4],[0,4],[0,5],[1,5],[0,7],[1,1]],[[0,10],[2,5],[2,5],[2,4],[0,6],[0,5],[1,2]],[[1,4],[1,3],[0,7],[0,6],[0,6],[2,4],[1,2],[2,9],[1,2]],[[1,2],[0,8],[1,6],[2,7],[0,6],[1,2]],[[2,5],[2,6],[2,5],[1,1],[0,8],[2,7],[2,8]]],"stocks":[[7,9,5],[3,5,3,1],[6,6,8]],"B":5,"M":5,"W":false,"slackTotal":3,"starLeft":[1,2],"seed":5974},"gen":{"keep":0.7,"len":[3,7],"dig":0.25,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","T":36,"D":7,"slack":1,"B":5,"M":5,"digCap":4,"seed":5974},"eval":{"P1":0.63,"P3":0.41,"N":0.29,"G":0.01,"raw":{"P1":0.55,"K":0.7,"P3":0.45,"M":0.37,"N":0.29,"G":0.01},"star3P1":0.28},"solution":[{"col":2},{"col":4},{"col":0},{"col":0},{"col":1},{"draw":1},{"col":3},{"col":4},{"col":2},{"col":3},{"draw":2},{"col":4},{"col":4},{"col":2},{"draw":0},{"col":3},{"draw":1},{"col":4},{"col":1},{"col":4},{"col":0},{"col":2},{"col":4},{"col":1},{"col":2},{"col":2},{"draw":2},{"col":1},{"col":2},{"col":0},{"col":0},{"col":1},{"col":0},{"col":3},{"col":1},{"draw":0},{"col":0},{"col":3},{"draw":1},{"col":1},{"col":2},{"col":2},{"col":3}]},{"n":6,"name":"挑战·窄传送带","minDraws":8,"exact":true,"data":{"piles":[10,10,8],"cols":[[[0,12],[1,7],[2,7],[0,9],[0,9],[1,11]],[[1,6],[2,6],[2,11],[1,12],[0,8],[0,9]],[[1,7],[1,6],[0,9],[0,10],[2,8],[0,8],[1,11],[2,5],[2,9],[2,10]],[[1,7],[0,11],[2,9],[2,5],[2,4],[2,7]],[[0,11],[0,11],[0,7],[1,10],[1,9],[2,3],[1,12],[1,11],[1,13]]],"stocks":[[10,8,10,8,10],[8,10,8,12],[8,6,10,6,4]],"B":4,"M":5,"W":false,"slackTotal":6,"starLeft":[1,3],"seed":7290},"gen":{"keep":0.7,"len":[3,7],"dig":0.25,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","T":34,"D":8,"slack":2,"B":4,"M":5,"digCap":3,"seed":7290},"eval":{"P1":0.59,"P3":0.41,"N":0.21,"G":0.21,"raw":{"P1":0.57,"K":0.61,"P3":0.54,"M":0.28,"N":0.21,"G":0.21},"star3P1":0.3},"solution":[{"col":2},{"col":1},{"col":1},{"col":0},{"col":1},{"col":4},{"col":0},{"col":2},{"col":4},{"draw":0},{"col":1},{"draw":2},{"col":2},{"col":4},{"col":1},{"col":3},{"draw":1},{"draw":2},{"col":3},{"col":3},{"col":4},{"col":2},{"col":0},{"draw":2},{"col":2},{"col":4},{"col":4},{"col":4},{"col":3},{"draw":0},{"col":2},{"col":2},{"col":0},{"col":2},{"draw":1},{"col":2},{"col":4},{"col":2},{"col":0},{"draw":0},{"col":1},{"col":4},{"col":0},{"col":3},{"col":3}]}];
+var LEVELS = [{"n":1,"name":"接龙与补牌","minDraws":2,"exact":true,"mech":[],"data":{"piles":[2,4,11],"cols":[[[2,11],[1,3],[0,2],[0,4],[0,3],[1,3]],[[1,6],[2,12]],[[1,6],[1,5],[0,5],[0,3],[2,12],[1,2]],[[1,7],[2,12],[2,12],[1,1],[1,2]],[[1,5],[2,13],[2,12],[0,4],[2,13],[0,3]]],"stocks":[[4,2],[2,4,4],[13,11,11]],"B":5,"M":5,"W":false,"slackTotal":6,"starLeft":[3,4],"seed":1056},"props":{"undo":3,"wild":1,"tray":0},"gen":{"keep":0.7,"len":[3,7],"dig":0,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","T":24,"D":2,"slack":2,"B":5,"M":5,"digCap":4,"seed":1056},"eval":{"P1":1,"P3":0.94,"N":0.77,"G":0.59,"raw":{"P1":1,"K":1,"P3":0.98,"M":0.89,"N":0.77,"G":0.59},"star3P1":0.72},"stars":{"e3":2,"e2":3},"solution":[{"col":0},{"col":3},{"col":0},{"col":0},{"col":4},{"col":3},{"col":2},{"col":2},{"col":4},{"col":0},{"col":0},{"col":2},{"col":4},{"col":3},{"col":2},{"draw":2},{"col":3},{"col":0},{"col":4},{"col":4},{"col":1},{"draw":1},{"col":2},{"col":1},{"col":4},{"col":2},{"col":3}]},{"n":2,"name":"冰封牌","minDraws":2,"exact":true,"mech":["ice"],"data":{"piles":[10,11,9],"cols":[[[2,8],[1,11],[0,7],[2,10],[1,10]],[[2,9],[2,10],[0,5],[1,12],[2,10,{"ice":1}]],[[2,9],[1,9],[1,10],[2,11],[0,9]],[[0,7],[1,9],[0,8]],[[2,8],[0,6],[0,7],[1,8],[0,6,{"ice":1}]]],"stocks":[[8,6,8],[11,9],[11,9,11]],"B":5,"M":5,"W":false,"slackTotal":6,"starLeft":[2,3],"seed":2027},"props":{"undo":3,"wild":1,"tray":0},"gen":{"keep":0.7,"len":[3,7],"dig":0.1,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","M":5,"B":5,"T":26,"D":2,"slack":2,"seed":2027},"eval":{"P1":1,"P3":0.95,"N":0.86,"raw":{"P1":1,"K":1,"P3":0.98,"M":0.93,"N":0.86},"bind":1,"fatal":0,"safe":1},"stars":{"e3":3,"e2":4},"solution":[{"col":0},{"col":2},{"col":3},{"col":0},{"col":2},{"col":0},{"col":3},{"col":4},{"col":4},{"col":2},{"col":1},{"col":4},{"col":2},{"col":1},{"draw":0},{"col":0},{"draw":2},{"col":3},{"col":4},{"col":1},{"col":2},{"col":1},{"col":0},{"col":1},{"col":4}]},{"n":3,"name":"锁与钥匙","minDraws":3,"exact":true,"mech":["lock"],"data":{"piles":[4,8,10],"cols":[[[1,7],[1,8],[2,11]],[[2,11],[1,7],[1,7]],[[2,10],[2,9],[1,5],[1,6],[2,9],[0,6],[1,6]],[[0,9],[0,10],[0,9],[2,12],[0,10],[0,9],[0,5]],[[1,9],[0,8],[0,11],[2,13,{"key":1}],[2,10],[0,7]]],"stocks":[[8,10,8],[6,8,6],[10,12,12]],"B":5,"M":5,"W":false,"slackTotal":6,"starLeft":[5,6],"seed":3011,"lock":{"col":0}},"props":{"undo":3,"wild":1,"tray":0},"gen":{"keep":0.7,"len":[3,7],"dig":0.1,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","M":5,"B":5,"T":27,"D":3,"slack":2,"seed":3011},"eval":{"P1":0.95,"P3":0.9,"N":0.94,"raw":{"P1":1,"K":0.9,"P3":0.97,"M":0.83,"N":0.94},"bind":1,"fatal":0,"safe":1},"stars":{"e3":0,"e2":1},"solution":[{"col":1},{"col":2},{"col":1},{"col":3},{"col":2},{"col":4},{"draw":0},{"col":1},{"col":3},{"col":3},{"col":4},{"col":2},{"draw":2},{"col":4},{"col":4},{"col":3},{"col":3},{"col":0},{"col":2},{"col":2},{"col":3},{"col":4},{"draw":1},{"col":3},{"col":2},{"col":0},{"col":0},{"col":4},{"col":2}]},{"n":4,"name":"补牌上锁","minDraws":3,"exact":true,"mech":["stockLock"],"data":{"piles":[6,10,10],"cols":[[[0,4],[0,5],[2,9],[2,9],[2,8],[0,3],[0,5]],[[1,10],[2,9],[0,1]],[[1,11],[1,10]],[[1,11],[1,11],[2,10],[0,2],[0,5],[0,4],[0,4]],[[1,9],[0,3],[2,9],[2,8],[2,9],[1,12],[1,11]]],"stocks":[[6,4,4],[12,10,12],[8,10,10]],"B":5,"M":5,"W":false,"slackTotal":6,"starLeft":[5,6],"seed":4162,"stockLock":{"c":1,"n":3}},"props":{"undo":3,"wild":1,"tray":1},"gen":{"keep":0.7,"len":[3,7],"dig":0.1,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","M":5,"B":5,"T":28,"D":3,"slack":2,"seed":4162},"eval":{"P1":1,"P3":0.95,"N":0.87,"raw":{"P1":1,"K":1,"P3":0.99,"M":0.91,"N":0.87},"bind":1,"fatal":0,"safe":0.99},"stars":{"e3":0,"e2":1},"solution":[{"col":0},{"col":3},{"col":0},{"col":4},{"col":4},{"col":2},{"col":0},{"draw":0},{"col":3},{"col":0},{"col":4},{"draw":2},{"col":0},{"col":4},{"col":4},{"col":3},{"col":0},{"col":0},{"col":4},{"col":3},{"col":1},{"col":3},{"col":2},{"col":1},{"col":4},{"draw":1},{"col":3},{"col":1},{"col":3}]},{"n":5,"name":"单向堆","minDraws":3,"exact":true,"mech":["dir"],"data":{"piles":[1,11,12],"cols":[[[1,12],[1,11],[0,3],[0,2],[1,12]],[[2,11],[2,13],[2,11],[2,12],[1,11]],[[2,9],[1,12],[1,12],[0,3],[2,11]],[[1,13],[0,5],[0,4],[0,2],[2,10],[0,4],[1,12]],[[2,10],[0,6],[1,12],[1,13]]],"stocks":[[2,1,1],[11,13,11],[12,10,12]],"B":5,"M":5,"W":false,"slackTotal":6,"starLeft":[4,5],"seed":5102,"dir":[1,0,0],"shape":{"R":100,"pileX":[104,195,286],"pileY":180}},"props":{"undo":3,"wild":1,"tray":1},"gen":{"keep":0.7,"len":[3,7],"dig":0.1,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","M":5,"B":5,"T":27,"D":3,"slack":2,"dirDraws":1,"shape":{"R":100,"pileX":[104,195,286],"pileY":180},"seed":5102},"eval":{"P1":0.98,"P3":0.94,"N":0.88,"raw":{"P1":0.96,"K":1,"P3":0.92,"M":0.95,"N":0.88},"bind":1,"fatal":0,"safe":1},"stars":{"e3":1,"e2":2},"solution":[{"col":2},{"col":0},{"col":4},{"col":3},{"col":0},{"col":2},{"col":3},{"col":1},{"col":4},{"col":3},{"col":1},{"draw":0},{"draw":1},{"col":3},{"col":3},{"col":0},{"col":3},{"col":4},{"col":2},{"col":3},{"col":0},{"col":0},{"col":2},{"col":1},{"col":1},{"draw":2},{"col":1},{"col":4},{"col":2}]},{"n":6,"name":"四色四堆","minDraws":3,"exact":true,"mech":["ice"],"data":{"piles":[9,6,5,10],"cols":[[[2,4],[3,9],[0,12],[1,5],[0,12,{"ice":1}]],[[2,6],[2,3],[1,2],[3,8],[3,9],[0,12],[0,11]],[[2,2],[1,3],[2,4],[1,6],[0,13]],[[1,1],[3,8],[3,7],[1,7,{"ice":1}]],[[2,5],[1,2],[1,3],[3,7],[0,11],[0,10]]],"stocks":[[11,13],[4,2,4],[5,3,3],[10,8,6]],"B":5,"M":5,"W":false,"slackTotal":8,"starLeft":[6,7],"seed":6002,"shape":{"R":100,"pileX":[99,163,227,291],"pileY":184}},"props":{"undo":3,"wild":1,"tray":1},"gen":{"keep":0.7,"len":[3,7],"dig":0.1,"ahead":1,"stay":0.55,"overlap":0.7,"vis":0.6,"digCover":0.8,"drawRead":0.85,"slackMode":"useful","M":5,"B":5,"T":30,"D":3,"slack":2,"K":4,"shape":{"R":100,"pileX":[99,163,227,291],"pileY":184},"seed":6002},"eval":{"P1":1,"P3":0.97,"N":0.92,"raw":{"P1":1,"K":0.99,"P3":1,"M":0.93,"N":0.92},"bind":1,"fatal":0,"safe":1},"stars":{"e3":1,"e2":2},"solution":[{"col":4},{"col":1},{"col":0},{"col":4},{"col":0},{"col":1},{"col":2},{"col":3},{"col":1},{"col":1},{"col":4},{"col":0},{"draw":3},{"col":2},{"col":3},{"draw":1},{"col":3},{"col":0},{"col":4},{"col":4},{"col":3},{"col":1},{"col":2},{"col":1},{"col":2},{"col":2},{"draw":2},{"col":0},{"col":4},{"col":1}]}];
 </script>
 <script>
-/* Solitaire Flow · 原型 v4 界面（分色 TriPeaks · 补牌分 3 叠）——判定全部调 ENGINE3，动画按引擎事件回放 */
+/* Solitaire Flow · 原型 v5 界面 —— 判定全部调 ENGINE5，动画按引擎事件回放（v4 的 app4.js 原样保留）
+ * v5：道具栏（撤回 / 万能牌 / 加托盘）；关卡机制表现（冰封、锁与钥匙、补牌上锁、单向堆）；4 色；每关轨道形状 */
 var UI = (function () {
   "use strict";
-  var E = ENGINE3, G = E.GEO, TY = 104;
-  var SUIT = ["♥", "●", "▲"], CNAME = ["红", "蓝", "绿"], COLOR = ["#e5484d", "#2f74e8", "#1d9a5f"];
+  var E = ENGINE5, G = null, TY = 104;
+  var SUIT = ["♥", "●", "▲", "◆"], CNAME = ["红", "蓝", "绿", "紫"], COLOR = ["#e5484d", "#2f74e8", "#1d9a5f", "#8e57d6"];
   var RK = function (r) { return r === 1 ? "A" : r === 11 ? "J" : r === 12 ? "Q" : r === 13 ? "K" : String(r); };
   var LAP = 1700, SMALL = 36 / 52, FLY = 280;
+  var KEY_SVG = "<svg viewBox='0 0 16 16' width='12' height='12'><circle cx='5' cy='8' r='3.3' fill='none' stroke='currentColor' stroke-width='2.2'/><path d='M8.2 8H15M12.2 8v3M14.6 8v2.4' fill='none' stroke='currentColor' stroke-width='2.2'/></svg>";
+  var LOCK_SVG = "<svg viewBox='0 0 16 16' width='12' height='12'><rect x='2.5' y='7' width='11' height='8' rx='1.5' fill='currentColor'/><path d='M5 7V5a3 3 0 0 1 6 0v2' fill='none' stroke='currentColor' stroke-width='2'/></svg>";
   var $ = function (id) { return document.getElementById(id); };
-  var KEY = "conveyor_proto_v4", LOGKEY = "conveyor_proto_v4_logs";
-  var save = (function () { try { var s = JSON.parse(localStorage.getItem(KEY)); if (s && s.stars) return s; } catch (e) {} return { unlocked: 1, stars: {} }; })();
+  var KEY = "solitaire_flow_v5", LOGKEY = "solitaire_flow_v5_logs";
+  var save = (function () { try { var s = JSON.parse(localStorage.getItem(KEY)); if (s && s.stars) return s; } catch (e) {} return { stars: {} }; })();
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
   function logs() { try { return JSON.parse(localStorage.getItem(LOGKEY)) || []; } catch (e) { return []; } }
   function pushLog(r) { var l = logs(); l.push(r); while (l.length > 200) l.shift(); try { localStorage.setItem(LOGKEY, JSON.stringify(l)); } catch (e) {} }
 
-  var opt = { peek: false, fast: false, hint: null, wild: 1 };   // wild：每关发几张万能牌（演示保底，默认 1）
+  var opt = { peek: false, fast: false, hint: null, undo: null, wild: null, tray: null };
   var cur = null, lvData = null, model = null, cards = {}, els = {}, plates = [], busy = false, pending = null, ended = false, attempt = null;
-  var armed = false, drag = null;
+  var armed = false, drag = null, hist = [], undoLeft = 0, seenMech = {};
+
+  /* ---------- 关卡文案 ---------- */
+  var INTRO = {
+    1: { tg: "新道具", t: "撤回 · 万能牌", p: "道具栏在补牌区下方：<b>↶ 撤回</b>撤销上一步（3 次，不影响星级）；<b>★ 万能牌</b>拖到任意归牌堆，那一色下一张牌不论点数都能接。" },
+    2: { tg: "新机制", t: "冰封牌", p: "有 2 张牌被冰冻，<b>不能点</b>。同色的牌每落一张，冰层 −1，碎了就能点。先推进那一色。" },
+    3: { tg: "新机制", t: "锁与钥匙", p: "有一列被<b>锁住</b>，整列不能点。另一列里藏着一张<b>钥匙牌</b>（牌背也能看到钥匙标记），它落堆后解锁。" },
+    4: { tg: "新机制 + 新道具", t: "补牌上锁 · 加托盘", p: "有一叠补牌<b>上锁</b>，这一色在出牌区再清掉几张才能翻（叠上实时显示）。新道具<b>＋ 加托盘</b>：传送带 +1 格。" },
+    5: { tg: "新机制", t: "单向堆 · 跑道形传送带", p: "有一个堆标 <b>↑</b>，<b>只接比堆顶大 1 的牌</b>。比堆顶小的同色牌只能等翻这一色的补牌。传送带换成跑道形。" },
+    6: { tg: "新机制", t: "四色四堆", p: "多了<b>紫色 ◆</b>：4 个归牌堆、4 叠补牌，规则不变。冰封牌回归，复习一下。" }
+  };
+  var TIPS = {
+    1: "点牌会先上传送带，转到同色闸口、差 1 才落（绿框 = 现在能落）。卡住了可以翻补牌，或用下方道具。",
+    2: "冰封牌不能点：同色牌每落一张，冰层 −1。先接那一色，把冰化开。",
+    3: "锁住的列不能点。找到带钥匙标记的牌，挖开它上面的牌，让它落堆。",
+    4: "上锁的补牌叠暂时不能翻：先多清这一色的牌。带满了可以用＋加托盘。",
+    5: "↑ 单向堆只接 +1：比堆顶小的牌接不上，要等翻这一色的补牌换个低一点的堆顶。",
+    6: "四种颜色并行：补牌只有 3–4 张一叠，先看清哪一色最缺。"
+  };
+  var MECH_NAME = { ice: "冰封", lock: "锁钥匙", stockLock: "补牌锁", dir: "单向堆" };
 
   /* ---------- 几何 ---------- */
   function beltXY(t) { var p = G.point(t); return { x: p.x - 18, y: p.y + TY - 25 }; }
   function plateXY(t) { var p = G.point(t); return { x: p.x - 22, y: p.y + TY - 29 }; }
-  function pileXY(i) { return { x: G.PILE_X[i] - 26, y: 162 }; }
+  function pileXY(i) { return { x: G.pileX[i] - 26, y: G.pileY }; }
   function colSp(M) { return M <= 5 ? 66 : M === 6 ? 58 : 52; }
-  var DEP = 11;   // 列内叠放间距：最深一列也不压到补牌区
+  var DEP = 11;
   function colXY(i, j, M) { return { x: 195 + (i - (M - 1) / 2) * colSp(M) - 26, y: 410 + j * DEP }; }
-  function stkXY(c) { return { x: 195 + (c - 1) * 84 - 26, y: 574 }; }
-  function wildXY() { return { x: 324, y: 574 }; }
+  function stkXY(c) { var K = model.K, sp = K === 4 ? 80 : 84; return { x: 195 + (c - (K - 1) / 2) * sp - 26, y: 574 }; }
   function put(el, x, y, s, z) { el.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px) scale(" + s + ")"; if (z != null) el.style.zIndex = z; }
 
   function drawTrack() {
@@ -843,92 +857,134 @@ var UI = (function () {
     var s = '<path d="' + d + '" fill="none" stroke="#2d3139" stroke-width="50" stroke-linejoin="round"/><path d="' + d + '" fill="none" stroke="#3a3f49" stroke-width="42"/><path class="dash" d="' + d + '" fill="none" stroke="#5d6470" stroke-width="2"/>';
     for (var k = 0; k < 10; k++) { var t = .05 + k / 10, a = G.point(t), b = G.point(t + .002), ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
       s += '<path d="M-4,-6 L4,0 L-4,6" fill="none" stroke="#7d8490" stroke-width="2" transform="translate(' + a.x.toFixed(1) + "," + (a.y + TY).toFixed(1) + ") rotate(" + ang.toFixed(1) + ')"/>'; }
-    for (var i = 0; i < 3; i++) s += '<rect x="' + (G.PILE_X[i] - 20) + '" y="' + (y0 + 19) + '" width="40" height="7" rx="3" fill="' + COLOR[i] + '"/>';
-    s += '<circle cx="' + G.ENT_X + '" cy="' + y1 + '" r="26" fill="none" stroke="#e0a800" stroke-width="2" stroke-dasharray="4 4"/>';
+    for (var i = 0; i < model.K; i++) {
+      var g = G.point(G.gates[i]), g2 = G.point(G.gates[i] + .002), an = Math.atan2(g2.y - g.y, g2.x - g.x) * 180 / Math.PI;
+      s += '<rect x="-18" y="19" width="36" height="7" rx="3" fill="' + COLOR[i] + '" transform="translate(' + g.x.toFixed(1) + "," + (g.y + TY).toFixed(1) + ") rotate(" + an.toFixed(1) + ')"/>';
+    }
+    var e = G.point(G.ENT);
+    s += '<circle cx="' + e.x.toFixed(1) + '" cy="' + (e.y + TY).toFixed(1) + '" r="26" fill="none" stroke="#e0a800" stroke-width="2" stroke-dasharray="4 4"/>';
     $("track").innerHTML = s;
+    $("entLbl").style.left = (e.x - 24) + "px"; $("entLbl").style.top = (e.y + TY + 30) + "px";
+    $("beltInfo").style.top = (G.pileY + 96) + "px";
   }
 
   /* ---------- 牌 ---------- */
   function face(el, c, show) {
     var nt = el.classList.contains("notrans");
     if (c.w) { el.className = "card wild"; el.innerHTML = "<i class='tl'>★</i><b>★</b><i class='br'>任意</i>"; }
-    else if (show) { el.className = "card k" + c.c; el.innerHTML = "<i class='tl'>" + SUIT[c.c] + "</i><b>" + RK(c.r) + "</b><i class='br'>" + SUIT[c.c] + "</i>"; }
-    else { el.className = "card back" + (opt.peek ? " peek" : ""); el.innerHTML = opt.peek ? "<b style='color:" + COLOR[c.c] + "'>" + RK(c.r) + "</b>" : ""; }
+    else if (show) { el.className = "card k" + c.c; el.innerHTML = "<i class='tl'>" + SUIT[c.c] + "</i><b>" + RK(c.r) + "</b><i class='br'>" + SUIT[c.c] + "</i>" + (c.key ? "<span class='keym'>" + KEY_SVG + "</span>" : ""); }
+    else { el.className = "card back" + (opt.peek ? " peek" : ""); el.innerHTML = (opt.peek ? "<b style='color:" + COLOR[c.c] + "'>" + RK(c.r) + "</b>" : "") + (c.key ? "<span class='keym'>" + KEY_SVG + "</span>" : ""); }
     if (nt) el.classList.add("notrans");
-    el.dataset.face = show ? 1 : 0;
+    el.dataset.face = show ? 1 : 0; el.dataset.ice = "";
+  }
+  function setIce(el, n) {
+    var cur = el.dataset.ice || "";
+    if (String(n || "") === cur) return;
+    var ic = el.querySelector(".ice"); if (ic) ic.remove();
+    if (n > 0) { var d = document.createElement("span"); d.className = "ice"; d.innerHTML = "<em>" + n + "</em><i>❄</i>"; el.appendChild(d); }
+    el.dataset.ice = n > 0 ? String(n) : "";
+  }
+  function ensurePlates(B) {
+    var b = $("board");
+    while (plates.length < B) { var pl = document.createElement("div"); pl.className = "plate"; b.appendChild(pl); plates.push(pl); }
+    while (plates.length > B) plates.pop().remove();
   }
   function buildBoard() {
+    G = E.geo(model); drawTrack();
     var b = $("board"); b.innerHTML = ""; els = {}; cards = {}; plates = [];
-    for (var i = 0; i < 3; i++) {
-      var ps = document.createElement("div"); ps.className = "pileSlot"; ps.style.left = (G.PILE_X[i] - 28) + "px"; ps.style.top = "160px"; ps.style.borderColor = COLOR[i]; b.appendChild(ps);
-      var pi = document.createElement("div"); pi.className = "pileInfo"; pi.id = "pinfo" + i; pi.style.left = (G.PILE_X[i] - 48) + "px"; pi.style.top = "238px"; b.appendChild(pi);
+    var narrow = model.K === 4;
+    for (var i = 0; i < model.K; i++) {
+      var px = G.pileX[i];
+      var ps = document.createElement("div"); ps.className = "pileSlot"; ps.style.left = (px - 28) + "px"; ps.style.top = (G.pileY - 2) + "px"; ps.style.borderColor = COLOR[i]; b.appendChild(ps);
+      var pi = document.createElement("div"); pi.className = "pileInfo"; pi.id = "pinfo" + i; pi.style.width = (narrow ? 64 : 96) + "px"; pi.style.left = (px - (narrow ? 32 : 48)) + "px"; pi.style.top = (G.pileY + 76) + "px"; b.appendChild(pi);
+      if (model.piles[i].dir) { var db = document.createElement("div"); db.className = "dirB"; db.style.background = COLOR[i]; db.style.left = (px + 16) + "px"; db.style.top = (G.pileY - 12) + "px"; db.textContent = model.piles[i].dir > 0 ? "↑" : "↓"; b.appendChild(db); }
       var sk = stkXY(i), ss = document.createElement("div"); ss.className = "stkSlot"; ss.style.left = (sk.x - 2) + "px"; ss.style.top = (sk.y - 2) + "px"; ss.style.borderColor = COLOR[i]; b.appendChild(ss);
       var sl = document.createElement("div"); sl.className = "stkLbl"; sl.id = "slbl" + i; sl.style.left = (sk.x - 14) + "px"; sl.style.top = (sk.y + 76) + "px"; sl.style.color = COLOR[i]; b.appendChild(sl);
     }
-    for (var k = 0; k < model.B; k++) { var pl = document.createElement("div"); pl.className = "plate"; b.appendChild(pl); plates.push(pl); }
+    if (model.stockLock) { var sx = stkXY(model.stockLock.c), lo = document.createElement("div"); lo.className = "stkLockOv"; lo.id = "stkLock"; lo.style.left = (sx.x - 2) + "px"; lo.style.top = (sx.y - 2) + "px"; b.appendChild(lo); }
+    ensurePlates(model.B);
     var all = [];
     model.piles.forEach(function (p) { all.push({ id: p.stack[0], c: p.c, r: p.r }); });
     model.cols.forEach(function (col) { col.forEach(function (c) { all.push(c); }); });
     model.stocks.forEach(function (s) { s.forEach(function (c) { all.push(c); }); });
     all.forEach(function (c) {
-      cards[c.id] = { c: c.c, r: c.r };
+      cards[c.id] = { c: c.c, r: c.r, key: c.key ? 1 : 0 };
       var el = document.createElement("div"); el.dataset.id = c.id; el.addEventListener("pointerdown", onCard);
-      b.appendChild(el); els[c.id] = el; el.classList.add("notrans"); face(el, c, true);
+      b.appendChild(el); els[c.id] = el; el.classList.add("notrans"); face(el, cards[c.id], true);
     });
-    // 万能牌道具：右下道具槽 + 每张一个牌元素（id 接在牌面之后）；三个归牌堆各一块放置判定区
-    var wx = wildXY(), ws = document.createElement("div"); ws.className = "wildSlot" + (model.wild ? "" : " none"); ws.id = "wSlot"; ws.style.left = (wx.x - 2) + "px"; ws.style.top = (wx.y - 2) + "px"; b.appendChild(ws);
-    var wl = document.createElement("div"); wl.className = "stkLbl wildLbl"; wl.id = "wLbl"; wl.style.left = (wx.x - 14) + "px"; wl.style.top = (wx.y + 76) + "px"; b.appendChild(wl);
     for (var w = 1; w <= model.wild; w++) {
       var wid = model.total + w; cards[wid] = { w: 1, c: -1 };
-      var we = document.createElement("div"); we.dataset.id = wid; we.addEventListener("pointerdown", onWild);
-      b.appendChild(we); els[wid] = we; we.classList.add("notrans"); face(we, cards[wid], true);
+      var we = document.createElement("div"); we.dataset.id = wid; b.appendChild(we); els[wid] = we; we.classList.add("notrans", "hide"); face(we, cards[wid], true); we.classList.add("hide");
     }
-    for (var h = 0; h < 3; h++) { var ph = document.createElement("div"); ph.className = "pileHit"; ph.id = "pHit" + h; ph.dataset.pile = h; ph.style.left = (G.PILE_X[h] - 36) + "px"; ph.style.top = "154px"; ph.style.setProperty("--pc", COLOR[h]);
+    for (var h = 0; h < model.K; h++) { var ph = document.createElement("div"); ph.className = "pileHit"; ph.id = "pHit" + h; ph.dataset.pile = h; ph.style.left = (G.pileX[h] - (narrow ? 31 : 36)) + "px"; ph.style.width = (narrow ? 62 : 72) + "px"; ph.style.top = (G.pileY - 8) + "px"; ph.style.setProperty("--pc", COLOR[h]);
       ph.addEventListener("pointerdown", function (e) { e.preventDefault(); e.stopPropagation(); if (armed) doWild(+this.dataset.pile); }); b.appendChild(ph); }
+    if (model.lock) {
+      var lc = model.lock.col, M = model.cols.length, x0 = colXY(lc, 0, M).x, n = model.cols[lc].length;
+      var lk = document.createElement("div"); lk.className = "lockOv"; lk.id = "lockOv";
+      lk.style.left = (x0 - 5) + "px"; lk.style.top = "402px"; lk.style.width = "62px"; lk.style.height = (Math.max(0, n - 1) * Math.min(11, 60 / Math.max(1, n - 1)) + 89) + "px";
+      lk.innerHTML = "<span class='lk'>" + LOCK_SVG + " 锁</span>"; b.appendChild(lk);
+    }
     var mx = 1; model.cols.forEach(function (c) { mx = Math.max(mx, c.length); }); DEP = Math.min(11, 60 / Math.max(1, mx - 1));
+    if (model.lock) $("lockOv").style.height = ((model.cols[model.lock.col].length - 1) * DEP + 89) + "px";
     for (var m = 0; m < model.cols.length; m++) { var cc = document.createElement("div"); cc.className = "colCnt mono"; cc.id = "ccnt" + m; b.appendChild(cc); }
   }
   function settleNoTrans() { requestAnimationFrame(function () { requestAnimationFrame(function () { Object.keys(els).forEach(function (id) { els[id].classList.remove("notrans"); }); }); }); }
   function placePlates(phase, B) { plates.forEach(function (pl, k) { var xy = plateXY(phase + k / B); pl.style.transform = "translate(" + xy.x.toFixed(1) + "px," + xy.y.toFixed(1) + "px)"; }); }
   function hintOn() { return opt.hint === null ? (cur && cur.level && cur.level.n === 1) : opt.hint; }
 
+  function pileText(st, i) {
+    var p = st.piles[i], nb;
+    if (p.wild) nb = "任意";
+    else if (p.dir) { var x = p.r + p.dir; nb = x >= 1 && x <= 13 ? RK(x) : "—"; }
+    else nb = [p.r - 1, p.r + 1].filter(function (x) { return x >= 1 && x <= 13; }).map(RK).join(st.K === 4 ? "/" : " / ");
+    var real = p.stack.filter(function (id) { return !cards[id] || !cards[id].w; }).length;
+    return (st.K === 4 ? "" : "<b class='mono'>×" + real + "</b> · ") + (p.dir && !p.wild ? "只接 " : "接 ") + "<b class='mono' style='color:" + COLOR[i] + "'>" + nb + "</b>";
+  }
   function render(st, anim) {
     var seen = {}, M = st.cols.length;
+    if (plates.length !== st.B) ensurePlates(st.B);
     st.piles.forEach(function (p, i) {
       var xy = pileXY(i);
       p.stack.forEach(function (id, k) { seen[id] = 1; var el = els[id];
-        if (k === p.stack.length - 1) { el.classList.remove("hide"); if (el.dataset.face !== "1") face(el, cards[id], true); el.classList.remove("tap", "can"); if (cards[id].w) el.style.setProperty("--pc", COLOR[i]); put(el, xy.x, xy.y, 1, 5); }
+        if (k === p.stack.length - 1) { el.classList.remove("hide"); if (el.dataset.face !== "1") face(el, cards[id], true); el.classList.remove("tap", "can"); setIce(el, 0); if (cards[id].w) el.style.setProperty("--pc", COLOR[i]); put(el, xy.x, xy.y, 1, 5); }
         else { el.classList.add("hide"); put(el, xy.x, xy.y, 1, 4); } });
-      var nb = p.wild ? "任意" : [p.r - 1, p.r + 1].filter(function (x) { return x >= 1 && x <= 13; }).map(RK).join(" / ");
-      var real = p.stack.filter(function (id) { return !cards[id].w; }).length;
-      $("pinfo" + i).innerHTML = "<b class='mono'>×" + real + "</b> · 接 <b class='mono' style='color:" + COLOR[i] + "'>" + nb + "</b>";
+      $("pinfo" + i).innerHTML = pileText(st, i);
     });
     st.cols.forEach(function (col, i) {
+      var lockedCol = E.locked(st, i);
       col.forEach(function (c, j) { seen[c.id] = 1; var el = els[c.id], top = j === col.length - 1;
-        if ((el.dataset.face === "1") !== top || (!top && el.classList.contains("peek") !== opt.peek)) face(el, c, top);
+        if ((el.dataset.face === "1") !== top || (!top && el.classList.contains("peek") !== opt.peek)) face(el, cards[c.id], top);
+        setIce(el, top ? c.ice : 0);
         el.classList.remove("hide"); var xy = colXY(i, j, M); put(el, xy.x, xy.y, 1, 10 + j);
-        el.classList.toggle("tap", top); el.classList.toggle("can", top && !anim && hintOn() && E.accept(st, c)); });
+        el.classList.toggle("tap", top); el.classList.toggle("can", top && !anim && hintOn() && E.canPlay(st, i) && E.accept(st, c)); });
       var cc = $("ccnt" + i), base = colXY(i, Math.max(col.length - 1, 0), M);
       cc.style.left = base.x + "px"; cc.style.top = (col.length ? base.y + 76 : 426) + "px"; cc.textContent = col.length ? "剩 " + col.length : "空";
     });
-    st.belt.forEach(function (c) { seen[c.id] = 1; var el = els[c.id]; if (el.dataset.face !== "1") face(el, cards[c.id], true); el.classList.remove("hide", "tap", "can"); var xy = beltXY(c.t); put(el, xy.x, xy.y, SMALL, 30); });
+    if (st.lock && $("lockOv")) { var lo = $("lockOv"); lo.classList.toggle("open", !!st.lock.open); var n = st.cols[st.lock.col].length; lo.style.height = (Math.max(0, n - 1) * DEP + 89) + "px"; if (!n) lo.classList.add("open"); }
+    st.belt.forEach(function (c) { seen[c.id] = 1; var el = els[c.id]; if (el.dataset.face !== "1") face(el, cards[c.id], true); setIce(el, 0); el.classList.remove("hide", "tap", "can"); var xy = beltXY(c.t); put(el, xy.x, xy.y, SMALL, 30); });
     st.stocks.forEach(function (s, c) {
-      var xy = stkXY(c);
+      var xy = stkXY(c), lk = E.stockLocked(st, c);
       s.forEach(function (x, k) { seen[x.id] = 1; var el = els[x.id], n = s.length;
-        if (k === n - 1) { if (el.dataset.face !== "1") face(el, cards[x.id], true); el.classList.remove("hide", "can"); el.classList.add("tap"); put(el, xy.x, xy.y, 1, 12); }
+        if (k === n - 1) { if (el.dataset.face !== "1") face(el, cards[x.id], true); el.classList.remove("hide", "can"); el.classList.toggle("tap", !lk); put(el, xy.x, xy.y, 1, 12); }
         else if (k === n - 2) { if (el.dataset.face !== "0" || el.classList.contains("peek") !== opt.peek) face(el, cards[x.id], false); el.classList.remove("hide", "tap"); put(el, xy.x + 4, xy.y + 4, 1, 11); }
         else { face(el, cards[x.id], false); el.classList.add("hide"); put(el, xy.x + 4, xy.y + 4, 1, 10); } });
       $("slbl" + c).textContent = s.length ? CNAME[c] + " 剩 " + s.length : CNAME[c] + " · 空";
     });
-    var used = st.stats.wilds, wx = wildXY();
-    for (var w = used + 1; w <= used + st.wild; w++) { var wid = st.total + w, we = els[wid]; if (!we || (drag && drag.id === wid)) { seen[wid] = 1; continue; } seen[wid] = 1;
-      if (w === used + 1) { we.classList.remove("hide"); we.classList.toggle("armed", armed); put(we, wx.x, wx.y, 1, 13); } else { we.classList.add("hide"); put(we, wx.x, wx.y, 1, 12); } }
-    if ($("wLbl")) $("wLbl").textContent = st.wild ? "万能 ×" + st.wild : (used ? "万能 · 已用" : "");
-    Object.keys(els).forEach(function (id) { if (!seen[id]) els[id].classList.add("hide"); });
+    if (st.stockLock && $("stkLock")) { var need = E.stockLockNeed(st), L = $("stkLock"); L.classList.toggle("open", !need);
+      if (need) L.innerHTML = LOCK_SVG.replace("width='12' height='12'", "width='18' height='18'") + "<span>" + CNAME[st.stockLock.c] + "牌再清</span><b class='mono' style='font-size:16px'>" + need + " 张</b>"; }
+    Object.keys(els).forEach(function (id) { if (!seen[id] && !(drag && +id === drag.id)) els[id].classList.add("hide"); });
     placePlates(st.phase, st.B);
     var ph = ""; for (var i = 0; i < st.B; i++) ph += "<i class='" + (i < st.belt.length ? "on" : "") + "'></i>";
     $("beltPips").innerHTML = ph; $("beltPips").classList.toggle("full", st.belt.length >= st.B); $("beltTxt").textContent = st.belt.length + "/" + st.B;
-    if (!anim) { var s = model.stats; $("stats").innerHTML = "<span>步 " + model.step + "</span><span>上带即落 " + s.direct + "</span><span>滞留带上 " + s.beltIn + "</span><span>翻补牌 " + s.draws + "</span><span>连锁 " + s.maxChain + "</span>" + (s.wilds ? "<span>万能 " + s.wilds + "</span>" : ""); }
+    if (!anim) propBar();
+  }
+  function propBar() {
+    var u = $("pUndo"), w = $("pWild"), t = $("pTray");
+    $("nUndo").textContent = undoLeft; u.classList.toggle("off", !(undoLeft > 0 && hist.length) || busy);
+    $("nWild").textContent = model.wild; w.classList.toggle("off", !(model.wild > 0) || ended || busy); w.classList.toggle("armed", armed);
+    var trayLv = lvData && lvData.tray > 0;
+    var nt = $("nTray"); nt.textContent = trayLv || model.tray || model.stats.trays ? model.tray : "4关"; nt.classList.toggle("lk", !(trayLv || model.tray || model.stats.trays));
+    t.classList.toggle("off", !(model.tray > 0) || ended || busy);
   }
 
   /* ---------- 动画（不跳帧；排队输入只加速） ---------- */
@@ -938,7 +994,7 @@ var UI = (function () {
     return new Promise(function (res) {
       var bel = view.belt.map(function (c) { return { el: els[c.id], t0: c.t }; }), ph0 = view.phase, B = view.B;
       bel.forEach(function (b) { b.el.classList.add("notrans"); });
-      var dur = Math.max(120, d * LAP / speed()), el = 0, last = null;
+      var dur = Math.max(120, d * LAP * (G.P / 1052) / speed()), el = 0, last = null;
       $("track").classList.add("moving");
       function frame(now) {
         if (last !== null) el += Math.min(34, Math.max(0, now - last)); last = now;
@@ -952,26 +1008,34 @@ var UI = (function () {
   }
   function popAt(x, y, t, c) { var d = document.createElement("div"); d.className = "pop"; d.textContent = t; d.style.color = c || "#1f2329"; d.style.left = x + "px"; d.style.top = y + "px"; $("board").appendChild(d); setTimeout(function () { d.remove(); }, 950); }
   async function playback(before, ev) {
-    busy = true; var view = JSON.parse(JSON.stringify(before)), chain = 0;
+    busy = true; propBar(); var view = E.clone(before), chain = 0;
     for (var k = 0; k < ev.length; k++) {
       var e = ev[k];
       if (e.type === "move") await tween(view, e.d);
       else if (e.type === "land") {
-        if (e.from === "col") E.landFromCol(view, e.col); else E.landFromBelt(view, e.id);
+        var iceBefore = view.stats.iceBreak, lockBefore = view.lock && view.lock.open;
+        E.landFromBelt(view, e.id);
         chain++; var xy = pileXY(e.pile), el = els[e.id]; el.classList.add("fly"); el.classList.remove("can", "queued"); put(el, xy.x, xy.y, 1, 60);
         await wait(FLY + 20); el.classList.remove("fly"); render(view, true);
-        if (chain >= 2) popAt(160, 236, "连锁 ×" + chain);
+        if (chain >= 2) popAt(160, G.pileY + 74, "连锁 ×" + chain);
+        if (view.stats.iceBreak > iceBefore) popAt(150, 392, "冰碎了！", "#2f78a8");
+        if (view.lock && view.lock.open && !lockBefore) popAt(130, 392, "钥匙落堆 → 解锁！", "#8a5a00");
       } else if (e.type === "belt") {
-        var b = E.toBelt(view, e.col), el2 = els[e.id]; el2.classList.add("fly"); el2.classList.remove("can", "queued");
+        var slBefore = view.stockLock && view.stockLock.open;
+        E.toBelt(view, e.col); var el2 = els[e.id]; el2.classList.add("fly"); el2.classList.remove("can", "queued");
         render(view, true); await wait(FLY + 20); el2.classList.remove("fly");
+        if (view.stockLock && view.stockLock.open && !slBefore) { var sx = stkXY(view.stockLock.c); popAt(sx.x - 10, sx.y - 20, "补牌解锁！", COLOR[view.stockLock.c]); }
       } else if (e.type === "draw") {
         E.drawRaw(view, e.pile); var el3 = els[e.id], xy3 = pileXY(e.pile); el3.classList.add("fly"); el3.classList.remove("queued"); put(el3, xy3.x, xy3.y, 1, 60);
         await wait(FLY + 20); el3.classList.remove("fly"); render(view, true);
         popAt(xy3.x - 8, xy3.y - 24, "补牌 → " + RK(cards[e.id].r), COLOR[e.pile]);
       } else if (e.type === "wild") {
-        E.wildRaw(view, e.pile); var el4 = els[e.id], xy4 = pileXY(e.pile); el4.classList.remove("armed", "drag", "notrans"); el4.classList.add("fly"); el4.style.setProperty("--pc", COLOR[e.pile]); put(el4, xy4.x, xy4.y, 1, 60);
+        E.wildRaw(view, e.pile); var el4 = els[e.id], xy4 = pileXY(e.pile); el4.classList.remove("armed", "drag", "notrans", "hide"); el4.classList.add("fly"); el4.style.setProperty("--pc", COLOR[e.pile]); put(el4, xy4.x, xy4.y, 1, 60);
         await wait(FLY + 20); el4.classList.remove("fly"); render(view, true);
         popAt(xy4.x - 14, xy4.y - 24, "★ " + CNAME[e.pile] + "堆接任意", COLOR[e.pile]);
+      } else if (e.type === "tray") {
+        E.trayRaw(view); ensurePlates(view.B); render(view, true); await wait(FLY + 40);
+        popAt(150, G.pileY + 100, "传送带 +1 格", "#8a5a00");
       }
     }
     $("track").classList.remove("moving"); busy = false; render(model);
@@ -979,67 +1043,30 @@ var UI = (function () {
 
   /* ---------- 输入 ---------- */
   function topCol(id) { for (var i = 0; i < model.cols.length; i++) { var c = model.cols[i]; if (c.length && c[c.length - 1].id === id) return i; } return -1; }
-  function topStock(id) { for (var c = 0; c < 3; c++) { var s = model.stocks[c]; if (s.length && s[s.length - 1].id === id) return c; } return -1; }
+  function topStock(id) { for (var c = 0; c < model.K; c++) { var s = model.stocks[c]; if (s.length && s[s.length - 1].id === id) return c; } return -1; }
+  function nope(el) { el.classList.remove("nope"); void el.offsetWidth; el.classList.add("nope"); }
   function onCard(ev) {
     ev.preventDefault(); if (ended) return;
     var id = +this.dataset.id, col = topCol(id), stk = col < 0 ? topStock(id) : -1;
     if (col < 0 && stk < 0) return;
     if (armed) setArmed(false);
+    if (col >= 0) {
+      var why = E.whyNotPlay(model, col), t = model.cols[col][model.cols[col].length - 1];
+      if (why === "ice") { nope(this); coach("❄ 冰封牌：" + CNAME[t.c] + "牌再落 " + t.ice + " 张，冰才会碎。", "warn"); return; }
+      if (why === "locked") { nope(this); coach("这一列被锁住了：先让带钥匙标记的牌落堆。", "warn"); return; }
+    }
+    if (stk >= 0 && E.stockLocked(model, stk)) { nope(this); coach(CNAME[stk] + "色补牌上锁：出牌区" + CNAME[stk] + "牌再清 " + E.stockLockNeed(model) + " 张才能翻。", "warn"); return; }
     if (busy) { document.querySelectorAll(".card.queued").forEach(function (e) { e.classList.remove("queued"); }); pending = { col: col, stk: stk, id: id }; this.classList.add("queued"); return; }
     if (col >= 0) doPlay(col); else doDraw(stk);
   }
   function lab(c) { return CNAME[c.c] + RK(c.r); }
-  /* ---------- 万能牌道具：拖到任意归牌堆（或先点道具、再点归牌堆） ---------- */
-  function stagePt(ev) { var r = $("stage").getBoundingClientRect(), s = r.width / 390; return { x: (ev.clientX - r.left) / s, y: (ev.clientY - r.top) / s }; }
-  function pileAt(p) { for (var i = 0; i < 3; i++) if (Math.abs(p.x - G.PILE_X[i]) <= 38 && p.y >= 146 && p.y <= 256) return i; return -1; }
-  function setArmed(on) {
-    armed = !!on;
-    for (var i = 0; i < 3; i++) $("pHit" + i).classList.toggle("on", armed);
-    document.querySelectorAll(".card.wild").forEach(function (e) { e.classList.toggle("armed", armed && !model.piles.some(function (p) { return p.stack[p.stack.length - 1] === +e.dataset.id; })); });
-    if (armed) coach("把 ★ 放到哪一堆？点上方任一归牌堆（再点 ★ 取消）。", "warn");
-  }
-  function hoverPile(i) { for (var k = 0; k < 3; k++) $("pHit" + k).classList.toggle("hov", k === i); }
-  function onWild(ev) {
-    ev.preventDefault(); ev.stopPropagation();
-    var id = +this.dataset.id;
-    if (ended || !(model.wild > 0) || id !== model.total + model.stats.wilds + 1) return;
-    if (busy) { coach("等这一步的动画结束，再用万能牌。", "warn"); return; }
-    hideGuide();
-    var el = this, p0 = stagePt(ev), wx = wildXY();
-    drag = { id: id, x0: p0.x, y0: p0.y, moved: false };
-    try { el.setPointerCapture(ev.pointerId); } catch (e) {}
-    el.classList.add("notrans");
-    function mv(e) {
-      var p = stagePt(e); if (!drag.moved && Math.hypot(p.x - drag.x0, p.y - drag.y0) < 6) return;
-      if (!drag.moved) { drag.moved = true; setArmed(false); for (var k = 0; k < 3; k++) $("pHit" + k).classList.add("on"); el.classList.add("drag"); }
-      put(el, wx.x + p.x - drag.x0, wx.y + p.y - drag.y0, 1.08, 99); hoverPile(pileAt(p));
-    }
-    function up(e) {
-      el.removeEventListener("pointermove", mv); el.removeEventListener("pointerup", up); el.removeEventListener("pointercancel", up);
-      var moved = drag.moved, tgt = moved ? pileAt(stagePt(e)) : -1; drag = null;
-      el.classList.remove("drag"); hoverPile(-1); for (var k = 0; k < 3; k++) $("pHit" + k).classList.remove("on");
-      if (!moved) { el.classList.remove("notrans"); setArmed(!armed); return; }
-      if (tgt >= 0) doWild(tgt);
-      else { el.classList.remove("notrans"); render(model); coach("没放到归牌堆上：把 ★ 拖到上方任一归牌堆。", "warn"); }
-    }
-    el.addEventListener("pointermove", mv); el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
-  }
-  async function doWild(c) {
-    if (busy || ended || !(model.wild > 0)) return;
-    setArmed(false); hideGuide();
-    var before = JSON.parse(JSON.stringify(model)), prevTop = RK(model.piles[c].r);
-    var ev = E.useWild(model, c); if (!ev) return;
-    var lands = ev.filter(function (e) { return e.type === "land"; });
-    attempt.actions.push({ a: "wild", step: model.step, pile: CNAME[c], cover: prevTop, beltLand: lands.length });
-    $("last").innerHTML = "第 " + model.step + " 步 · ★ 盖住" + CNAME[c] + "堆（原 " + prevTop + "）→ 下一张<b style='color:" + COLOR[c] + "'>" + CNAME[c] + "牌</b>任意点数可接" +
-      (lands.length ? "；" + lands.map(function (e) { return CNAME[cards[e.id].c] + RK(cards[e.id].r); }).join("、") + " 落下" : "");
-    await playback(before, ev); after();
-  }
+  function snapshot() { hist.push({ st: E.clone(model), last: $("last").innerHTML }); if (hist.length > 60) hist.shift(); }
   async function doPlay(col) {
     hideGuide();
-    if (!E.canPlay(model, col)) { coach("传送带满了，没有空托盘：先翻补牌，让带上的牌落下去。", "warn"); shake(); return; }
-    var before = JSON.parse(JSON.stringify(model)), top = model.cols[col][model.cols[col].length - 1];
-    var ev = E.play(model, col); if (!ev) return;
+    if (!E.canPlay(model, col)) { coach("传送带满了，没有空托盘：先翻补牌" + (model.tray > 0 ? "，或用＋加托盘" : "") + "，让带上的牌落下去。", "warn"); shake(); return; }
+    snapshot();
+    var before = E.clone(model), top = model.cols[col][model.cols[col].length - 1];
+    var ev = E.play(model, col); if (!ev) { hist.pop(); return; }
     var lands = ev.filter(function (e) { return e.type === "land"; });
     attempt.actions.push({ a: "play", step: model.step, col: col, card: lab(top), landed: ev.landedSelf, chain: lands.length, belt: model.belt.length });
     var others = lands.length - (ev.landedSelf ? 1 : 0);
@@ -1049,8 +1076,10 @@ var UI = (function () {
   }
   async function doDraw(c) {
     hideGuide();
-    var before = JSON.parse(JSON.stringify(model)), x = model.stocks[c][model.stocks[c].length - 1];
-    var ev = E.draw(model, c); if (!ev) return;
+    if (!E.canDraw(model, c)) return;
+    snapshot();
+    var before = E.clone(model), x = model.stocks[c][model.stocks[c].length - 1];
+    var ev = E.draw(model, c); if (!ev) { hist.pop(); return; }
     var lands = ev.filter(function (e) { return e.type === "land"; }).length;
     attempt.actions.push({ a: "draw", step: model.step, color: CNAME[c], card: RK(x.r), beltLand: lands });
     $("last").innerHTML = "第 " + model.step + " 步 · 翻" + CNAME[c] + "叠 → " + CNAME[c] + "堆顶改为 <b style='color:" + COLOR[c] + "'>" + RK(x.r) + "</b>" + (lands ? "；带上落下 " + lands + " 张" : "");
@@ -1058,38 +1087,89 @@ var UI = (function () {
   }
   function shake() { $("beltInfo").animate([{ transform: "translateX(0)" }, { transform: "translateX(-5px)" }, { transform: "translateX(5px)" }, { transform: "translateX(0)" }], { duration: 240 }); }
   function coach(t, cls) { var c = $("coach"); c.innerHTML = t; c.className = cls || ""; }
-  var TIPS = {
-    1: "点牌会先上传送带，转到同色闸口、差 1 才落（绿框 = 现在能落）。接不上的留在带上占格。",
-    2: "挖开压着的牌：接不上的先放带上，等它前一张落下，它会自己跟着落（连锁）。",
-    3: "三色并行：卡住时先看补牌顶——翻开后能让带上或列顶的牌落下的那叠，才值得翻。",
-    4: "补牌更紧：能挖就先挖一张差 2 的牌，留着补牌给真正接不上的时候。",
-    5: "每叠只多 1 张：翻错一叠就少一次机会，先数清带上在等哪个点数。",
-    6: "传送带只有 4 格：别一次挖太多，留 1 格给能马上落的牌。"
-  };
-  /* ---------- 第 1 关引导：首次“排队区无解”时，框出补牌区 ---------- */
+
+  /* ---------- 道具：撤回 ---------- */
+  function doUndo() {
+    if (busy || !(undoLeft > 0) || !hist.length) { if (!hist.length && undoLeft > 0 && !busy) coach("还没有可以撤回的步骤。"); return; }
+    setArmed(false); hideGuide();
+    var h = hist.pop(); undoLeft--; model = h.st; ended = false; pending = null; $("coach").onclick = null; closeAll();
+    attempt.actions.push({ a: "undo", step: model.step, left: undoLeft });
+    $("last").innerHTML = "↶ 已撤回一步，回到第 " + model.step + " 步（撤回还剩 " + undoLeft + " 次）";
+    document.querySelectorAll(".card.queued").forEach(function (e) { e.classList.remove("queued"); });
+    render(model); after(true);
+  }
+  /* ---------- 道具：加托盘 ---------- */
+  async function doTray() {
+    if (busy || ended || !(model.tray > 0)) { if (!(lvData && lvData.tray > 0)) coach("加托盘从第 4 关开始提供。"); return; }
+    setArmed(false); hideGuide(); snapshot();
+    var before = E.clone(model), ev = E.useTray(model); if (!ev) { hist.pop(); return; }
+    attempt.actions.push({ a: "tray", step: model.step, B: model.B });
+    $("last").innerHTML = "第 " + model.step + " 步 · ＋ 加托盘：传送带变成 " + model.B + " 格";
+    await playback(before, ev); after();
+  }
+  /* ---------- 道具：万能牌（从道具栏拖到任意归牌堆，或点一下再点堆） ---------- */
+  function stagePt(ev) { var r = $("stage").getBoundingClientRect(), s = r.width / 390; return { x: (ev.clientX - r.left) / s, y: (ev.clientY - r.top) / s }; }
+  function pileAt(p) { var hw = model.K === 4 ? 31 : 38; for (var i = 0; i < model.K; i++) if (Math.abs(p.x - G.pileX[i]) <= hw && p.y >= G.pileY - 16 && p.y <= G.pileY + 94) return i; return -1; }
+  function setArmed(on) {
+    armed = !!on;
+    for (var i = 0; i < model.K; i++) $("pHit" + i).classList.toggle("on", armed);
+    $("pWild").classList.toggle("armed", armed);
+    if (armed) coach("把 ★ 放到哪一堆？点上方任一归牌堆（再点 ★ 取消）。", "warn");
+  }
+  function hoverPile(i) { for (var k = 0; k < model.K; k++) $("pHit" + k).classList.toggle("hov", k === i); }
+  function onWildDown(ev) {
+    ev.preventDefault();
+    if (ended || !(model.wild > 0)) return;
+    if (busy) { coach("等这一步的动画结束，再用万能牌。", "warn"); return; }
+    hideGuide();
+    var btn = this, id = model.total + model.stats.wilds + 1, el = els[id], p0 = stagePt(ev);
+    drag = { id: id, x0: p0.x, y0: p0.y, moved: false };
+    try { btn.setPointerCapture(ev.pointerId); } catch (e) {}
+    function mv(e) {
+      var p = stagePt(e); if (!drag.moved && Math.hypot(p.x - drag.x0, p.y - drag.y0) < 6) return;
+      if (!drag.moved) { drag.moved = true; setArmed(false); for (var k = 0; k < model.K; k++) $("pHit" + k).classList.add("on"); el.classList.add("notrans", "drag"); el.classList.remove("hide"); }
+      put(el, p.x - 26, p.y - 50, 1.08, 99); hoverPile(pileAt(p));
+    }
+    function up(e) {
+      btn.removeEventListener("pointermove", mv); btn.removeEventListener("pointerup", up); btn.removeEventListener("pointercancel", up);
+      var moved = drag.moved, tgt = moved ? pileAt(stagePt(e)) : -1; drag = null;
+      hoverPile(-1); for (var k = 0; k < model.K; k++) $("pHit" + k).classList.remove("on");
+      if (!moved) { setArmed(!armed); return; }
+      if (tgt >= 0) { doWild(tgt); return; }
+      el.classList.remove("drag"); el.classList.add("hide"); setTimeout(function () { el.classList.remove("notrans"); }, 30);
+      coach("没放到归牌堆上：把 ★ 拖到上方任一归牌堆。", "warn");
+    }
+    btn.addEventListener("pointermove", mv); btn.addEventListener("pointerup", up); btn.addEventListener("pointercancel", up);
+  }
+  async function doWild(c) {
+    if (busy || ended || !(model.wild > 0)) return;
+    setArmed(false); hideGuide(); snapshot();
+    var before = E.clone(model), prevTop = RK(model.piles[c].r);
+    var id = model.total + model.stats.wilds + 1, el = els[id];
+    if (el.classList.contains("hide")) { var b = $("pWild").getBoundingClientRect(), r = $("stage").getBoundingClientRect(), s = r.width / 390; el.classList.add("notrans"); put(el, (b.left - r.left) / s + 30, (b.top - r.top) / s - 20, 1, 60); el.classList.remove("hide"); void el.offsetWidth; }
+    var ev = E.useWild(model, c); if (!ev) { hist.pop(); return; }
+    var lands = ev.filter(function (e) { return e.type === "land"; });
+    attempt.actions.push({ a: "wild", step: model.step, pile: CNAME[c], cover: prevTop, beltLand: lands.length });
+    $("last").innerHTML = "第 " + model.step + " 步 · ★ 盖住" + CNAME[c] + "堆（原 " + prevTop + "）→ 下一张<b style='color:" + COLOR[c] + "'>" + CNAME[c] + "牌</b>任意点数可接" +
+      (lands.length ? "；" + lands.map(function (e) { return CNAME[cards[e.id].c] + RK(cards[e.id].r); }).join("、") + " 落下" : "");
+    await playback(before, ev); after();
+  }
+
+  /* ---------- 第 1 关引导：首次“卡住”时，框出补牌区 ---------- */
   var guide = { shown: false, on: false };
   function stuckNeedsStock(st) {
     if (!E.stockLeft(st)) return false;
-    var anyLand = st.cols.some(function (c) { return c.length && E.accept(st, c[c.length - 1]); });
-    return st.belt.length >= st.B || !anyLand;   // 带满，或出牌区最上面的牌都接不上（带上有没有牌都算）
+    var anyLand = st.cols.some(function (c, i) { return E.canPlay(st, i) && E.accept(st, c[c.length - 1]); });
+    return st.belt.length >= st.B || !anyLand;
   }
-  /* 推荐翻哪一叠：在模型副本上试翻（最多两步），看能让带上落下几张、出牌区多出几张能接的牌 */
-  function gain(st) {
-    if (st.belt.length >= st.B) return 0;   // 带满时出牌区的牌放不上去，不算
-    var n = 0; st.cols.forEach(function (c) { if (c.length && E.accept(st, c[c.length - 1])) n++; });
-    return n;
-  }
+  function gain(st) { if (st.belt.length >= st.B) return 0; var n = 0; st.cols.forEach(function (c, i) { if (E.canPlay(st, i) && E.accept(st, c[c.length - 1])) n++; }); return n; }
   function suggestStock(st) {
     var best = { c: -1, v: -1, now: 0 };
-    for (var c = 0; c < 3; c++) {
-      if (!st.stocks[c].length) continue;
-      var s1 = JSON.parse(JSON.stringify(st)), ev = E.draw(s1, c), land1 = ev.filter(function (e) { return e.type === "land"; }).length;
+    for (var c = 0; c < st.K; c++) {
+      if (!E.canDraw(st, c)) continue;
+      var s1 = E.clone(st), ev = E.draw(s1, c), land1 = ev.filter(function (e) { return e.type === "land"; }).length;
       var v = land1 * 3 + gain(s1) * 1.5, deep = 0;
-      if (v === 0) for (var d = 0; d < 3; d++) {
-        if (!s1.stocks[d].length) continue;
-        var s2 = JSON.parse(JSON.stringify(s1)), ev2 = E.draw(s2, d);
-        deep = Math.max(deep, ev2.filter(function (e) { return e.type === "land"; }).length * 3 + gain(s2) * 1.5);
-      }
+      if (v === 0) for (var d = 0; d < st.K; d++) { if (!E.canDraw(s1, d)) continue; var s2 = E.clone(s1), ev2 = E.draw(s2, d); deep = Math.max(deep, ev2.filter(function (e) { return e.type === "land"; }).length * 3 + gain(s2) * 1.5); }
       v = v + deep * .5 + st.stocks[c].length * .01;
       if (v > best.v) best = { c: c, v: v, now: land1, more: gain(s1) };
     }
@@ -1097,9 +1177,8 @@ var UI = (function () {
   }
   function showGuide() {
     guide.shown = guide.on = true;
-    var sg = suggestStock(model), c = sg.v >= .1 ? sg.c : -1, xy0 = stkXY(0), xy2 = stkXY(2);
-    // 高亮整块补牌区（含标题与剩余张数），框外压暗
-    var L = 5, T = 549, W = 380, H = 121;
+    var sg = suggestStock(model), c = sg.v >= .1 ? sg.c : -1;
+    var L = 5, T = 549, W = 380, H = 113;
     $("gHole").style.cssText = "left:" + L + "px;top:" + T + "px;width:" + W + "px;height:" + H + "px";
     $("gRing").style.cssText = "left:" + (L - 2) + "px;top:" + (T - 2) + "px;width:" + (W + 4) + "px;height:" + (H + 4) + "px";
     var tt = c >= 0 ? model.stocks[c][model.stocks[c].length - 1] : null;
@@ -1109,7 +1188,8 @@ var UI = (function () {
     b.innerHTML = "<button class='gb' onclick='UI.hideGuide()'>知道了</button><b>卡住了？用补牌区。</b><br>" + why +
       "点<b>补牌区</b>的一叠：它最上面那张会<b>直接成为这一色的新堆顶</b>，不用接龙。" +
       (tt ? "<br>试试 <span class='mini' style='background:" + COLOR[c] + "'>" + RK(tt.r) + "</span> " + CNAME[c] + "叠" +
-        (sg.now > 0 ? "：翻开后带上会落下 " + sg.now + " 张。" : sg.more > 0 ? "：翻开后出牌区有 " + sg.more + " 张能接上。" : "。现在翻哪一叠都不能马上见效，可能要连翻几张。") : "<br>现在翻哪一叠都不能马上让带上的牌落下，可能要连翻几张。");
+        (sg.now > 0 ? "：翻开后带上会落下 " + sg.now + " 张。" : sg.more > 0 ? "：翻开后出牌区有 " + sg.more + " 张能接上。" : "。") : "") +
+      "<br>走错了也没关系：下方 <b>↶ 撤回</b> 可以退一步。";
     $("guide").classList.add("on");
     if (c >= 0) els[tt.id].classList.add("pick");
     coach("卡住了：点补牌区的一叠（金框）。", "warn");
@@ -1120,36 +1200,42 @@ var UI = (function () {
     document.querySelectorAll(".card.pick").forEach(function (e) { e.classList.remove("pick"); });
   }
 
-  function after() {
+  function after(fromUndo) {
     var s = E.status(model);
     if (s.state !== "play") return finish(s);
-    var anyLand = model.cols.some(function (c) { return c.length && E.accept(model, c[c.length - 1]); });
-    var full = model.belt.length >= model.B, dry = !E.stockLeft(model);
-    if (model.wild > 0 && dry && (full || !anyLand)) coach("补牌用完了：把右下的 <b>★ 万能牌</b>拖到一个归牌堆，下一张同色牌不论点数都能接。", "warn");
-    else if (full) coach("传送带满了，没有空托盘：翻一叠补牌" + (model.wild > 0 ? "，或把 ★ 拖到归牌堆" : "") + "，让带上的牌落下去。", "warn");
-    else if (!anyLand) coach("出牌区没有能接的牌：放一张上带暂存、挖开下面的牌，或翻补牌。", "warn");
-    else coach(TIPS[cur.level ? cur.level.n : 0] || "连续接上同一色的牌会形成连锁。");
+    var anyLand = model.cols.some(function (c, i) { return E.canPlay(model, i) && E.accept(model, c[c.length - 1]); });
+    var full = model.belt.length >= model.B, dry = !model.stocks.some(function (x, c) { return E.canDraw(model, c); });
+    if (!fromUndo) {
+      if (dry && (full || !anyLand) && (model.wild > 0 || model.tray > 0)) coach("补牌用不上了：试试下方道具——<b>★ 万能牌</b>拖到归牌堆" + (model.tray > 0 ? "，或<b>＋加托盘</b>" : "") + (undoLeft > 0 ? "，也可以 <b>↶ 撤回</b>" : "") + "。", "warn");
+      else if (full) coach("传送带满了，没有空托盘：翻一叠补牌" + (model.tray > 0 ? "，或用＋加托盘" : "") + "，让带上的牌落下去。", "warn");
+      else if (!anyLand) coach("出牌区没有能接的牌：放一张上带暂存、挖开下面的牌，或翻补牌。", "warn");
+      else coach(TIPS[cur.level ? cur.level.n : 0] || "连续接上同一色的牌会形成连锁。");
+    } else coach(TIPS[cur.level ? cur.level.n : 0] || "");
     if (cur.level && cur.level.n === 1 && !guide.shown && model.stats.draws === 0 && stuckNeedsStock(model)) { pending = null; showGuide(); return; }
     if (pending) { var p = pending; pending = null; document.querySelectorAll(".card.queued").forEach(function (e) { e.classList.remove("queued"); });
       if (p.col >= 0) { var col = model.cols[p.col]; if (col.length && col[col.length - 1].id === p.id) doPlay(p.col); }
       else if (p.stk >= 0) { var sk = model.stocks[p.stk]; if (sk.length && sk[sk.length - 1].id === p.id) doDraw(p.stk); } }
   }
   function finish(s) {
-    ended = true; var rec = attempt; rec.result = s.state; rec.stars = s.stars || 0; rec.ms = Date.now() - rec.t0; rec.stats = JSON.parse(JSON.stringify(model.stats)); pushLog(rec);
-    var st = model.stats, kv = "<div class='kv'><span>步数</span><span>" + model.step + "</span><span>上带即落</span><span>" + st.direct + "</span><span>接不上、滞留带上</span><span>" + st.beltIn + "</span><span>传送带峰值</span><span>" + st.beltPeak + "/" + model.B + "</span><span>翻补牌</span><span>" + st.draws + "</span><span>剩余补牌</span><span>" + E.stockLeft(model) + "</span><span>最长连锁</span><span>" + st.maxChain + "</span><span>万能牌</span><span>" + st.wilds + "</span></div>";
+    ended = true; propBar(); var rec = attempt; rec.result = s.state; rec.stars = s.stars || 0; rec.ms = Date.now() - rec.t0; rec.stats = JSON.parse(JSON.stringify(model.stats)); rec.undoUsed = (lvData.undo || 0) - undoLeft; pushLog(rec);
+    var st = model.stats, kv = "<div class='kv'><span>步数</span><span>" + model.step + "</span><span>上带即落 / 滞留带上</span><span>" + st.direct + " / " + st.beltIn + "</span><span>翻补牌（最少 " + lvData.minDraws + "）</span><span>" + st.draws + "</span><span>剩余补牌</span><span>" + E.stockLeft(model) + "</span><span>最长连锁</span><span>" + st.maxChain + "</span><span>道具：撤回 / 万能 / 托盘</span><span>" + rec.undoUsed + " / " + st.wilds + " / " + st.trays + "</span></div>";
     var p = $("pEnd"), lv = cur.level;
     if (s.state === "win") {
-      if (lv) { save.stars[lv.n] = Math.max(save.stars[lv.n] || 0, s.stars); save.unlocked = Math.max(save.unlocked, Math.min(LEVELS.length, lv.n + 1)); persist(); }
+      if (lv) { save.stars[lv.n] = Math.max(save.stars[lv.n] || 0, s.stars); persist(); }
       var str = ""; for (var i = 1; i <= 3; i++) str += i <= s.stars ? "★" : "<span class='off'>★</span>";
-      p.innerHTML = "<h2>过关</h2><p class='sub'>剩余补牌 " + s.stockLeft + " 张。" + (s.wildCap ? "本局用了万能牌，最高 2★。" : "") + "3★ 仅标记。</p><div class='stars'>" + str + "</div>" + kv +
+      p.innerHTML = "<h2>过关</h2><p class='sub'>剩余补牌 " + s.stockLeft + " 张。" + (s.propCap ? "本局用了万能牌或加托盘，最高 2★。" : "") + "3★ 仅标记。</p><div class='stars'>" + str + "</div>" + kv +
         "<div class='row'><button class='btn ghost' onclick='UI.retry()'>重玩</button>" + (lv && lv.n < LEVELS.length ? "<button class='btn' onclick='UI.next()'>下一关</button>" : "<button class='btn' onclick='UI.openLevels()'>关卡</button>") + "</div>";
       coach("过关。", "");
     } else {
-      var blk = model.belt.map(function (c) { var nb = [c.r - 1, c.r + 1].filter(function (x) { return x >= 1 && x <= 13; }).map(RK).join("/");
-        return "<p><span class='mini' style='background:" + COLOR[c.c] + "'>" + RK(c.r) + "</span> 第 " + c.placed + " 步上带 · 需" + CNAME[c.c] + "堆 " + nb + "（现 " + RK(model.piles[c.c].r) + "）</p>"; }).join("");
-      p.innerHTML = "<h2>卡住了</h2><p class='sub'>" + (s.why === "full" ? "传送带已满，" : "") + "出牌区顶牌都接不上，补牌也用完了。</p>" + (blk ? "<h3>传送带上等待的牌</h3>" + blk : "") + kv +
-        "<p class='note'>这关有解（生成器已验证）。常见原因：补牌翻早了 / 翻错了颜色。</p><div class='row'><button class='btn ghost' onclick='UI.close(\"ovEnd\")'>看牌面</button><button class='btn' onclick='UI.retry()'>重玩</button></div>";
-      coach("卡住了。点这里重新打开结算，或点「重开」。", "bad"); $("coach").onclick = function () { if (ended) open("ovEnd"); };
+      var blk = model.belt.map(function (c) { var pl = model.piles[c.c], need = pl.dir ? RK(c.r - pl.dir) : [c.r - 1, c.r + 1].filter(function (x) { return x >= 1 && x <= 13; }).map(RK).join("/");
+        return "<p><span class='mini' style='background:" + COLOR[c.c] + "'>" + RK(c.r) + "</span> 第 " + c.placed + " 步上带 · 需" + CNAME[c.c] + "堆 " + need + "（现 " + RK(pl.r) + "）</p>"; }).join("");
+      var mech = [];
+      model.cols.forEach(function (col) { var t = col[col.length - 1]; if (t && t.ice > 0) mech.push("❄ " + CNAME[t.c] + RK(t.r) + " 还冻着（差 " + t.ice + " 层）"); });
+      if (model.lock && !model.lock.open) mech.push("锁住的列还没打开（钥匙牌没落堆）");
+      if (model.stockLock && !model.stockLock.open) mech.push(CNAME[model.stockLock.c] + "色补牌还锁着（再清 " + E.stockLockNeed(model) + " 张）");
+      p.innerHTML = "<h2>卡住了</h2><p class='sub'>" + (s.why === "full" ? "传送带已满，" : "") + "没有能做的动作了。</p>" + (mech.length ? "<h3>机制</h3><p>" + mech.join("<br>") + "</p>" : "") + (blk ? "<h3>传送带上等待的牌</h3>" + blk : "") + kv +
+        "<p class='note'>这关有解（生成器已验证）。</p><div class='row'>" + (undoLeft > 0 && hist.length ? "<button class='btn' onclick='UI.undo()'>↶ 撤回 ×" + undoLeft + "</button>" : "") + "<button class='btn ghost' onclick='UI.close(\"ovEnd\")'>看牌面</button><button class='btn ghost' onclick='UI.retry()'>重玩</button></div>";
+      coach("卡住了。点这里重新打开结算" + (undoLeft > 0 ? "，或点 ↶ 撤回" : "") + "。", "bad"); $("coach").onclick = function () { if (ended) open("ovEnd"); };
     }
     open("ovEnd");
   }
@@ -1157,96 +1243,110 @@ var UI = (function () {
   /* ---------- 局流程 ---------- */
   function hud() {
     $("lvName").textContent = cur.level ? "第 " + cur.level.n + " 关" : "沙盒";
-    $("lvTag").textContent = "牌阵" + lvData.cols.reduce(function (a, c) { return a + c.length; }, 0) + " · " + lvData.cols.length + "列 · 带" + lvData.B + " · 补牌" + lvData.stocks.map(function (s) { return s.length; }).join("/");
+    $("lvTag").textContent = (cur.level ? cur.level.name + " · " : "") + lvData.cols.reduce(function (a, c) { return a + c.length; }, 0) + "张 · 带" + lvData.B + " · 补" + lvData.stocks.map(function (s) { return s.length; }).join("/");
   }
   function loadData(level, gen) {
-    if (level && level.data) { var d = JSON.parse(JSON.stringify(level.data)); d.solution = level.solution || []; d.minDraws = level.minDraws; d.wild = opt.wild; return d; }
-    var lv = GEN4.build(gen); if (lv) { lv.solution = lv.solution.map(function (a) { return a.t === "draw" ? { draw: a.c } : { col: a.col }; }); lv.wild = opt.wild; }
-    return lv;
+    var d;
+    if (level && level.data) { d = JSON.parse(JSON.stringify(level.data)); d.solution = level.solution || []; d.minDraws = level.minDraws; d.props = level.props; }
+    else { d = GEN5.build(gen); if (!d) return null; d.solution = d.solution.map(function (a) { return a.t === "draw" ? { draw: a.c } : { col: a.col }; }); d.props = { undo: 3, wild: 1, tray: 1 }; }
+    var pr = d.props || {};
+    d.undo = opt.undo != null ? opt.undo : pr.undo || 0; d.wild = opt.wild != null ? opt.wild : pr.wild || 0; d.tray = opt.tray != null ? opt.tray : pr.tray || 0;
+    return d;
   }
   function starText(d) {
     if (!d.starLeft) return "";
     var tot = d.stocks.reduce(function (a, s) { return a + s.length; }, 0), e3 = tot - d.minDraws - d.starLeft[1], e2 = tot - d.minDraws - d.starLeft[0];
     return "3★ = 最多多翻 " + e3 + " 张；2★ = 最多多翻 " + e2 + " 张";
   }
+  function introHTML(n) { var it = INTRO[n]; return it ? "<div class='intro'><span class='tg'>" + it.tg + "</span><p><b>" + it.t + "</b><br>" + it.p + "</p></div>" : ""; }
   function prepare(level, gen) {
     cur = { level: level || null, gen: level ? level.gen : gen }; lvData = loadData(level, gen);
     if (!lvData) { alert("这组参数没生成出有解的关卡，换个种子或参数再试。"); return; }
-    model = E.newGame(lvData); ended = true; busy = false; pending = null;     // 背景先换成这一关的开局牌面（点“开始”前不可操作）
+    model = E.newGame(lvData); ended = true; busy = false; pending = null; hist = []; undoLeft = lvData.undo; armed = false;
     buildBoard(); render(model); settleNoTrans(); hud(); coach(TIPS[level ? level.n : 0] || "只能接同色、差 1 的牌。");
-    var g = { T: lvData.cols.reduce(function (a, c) { return a + c.length; }, 0), M: lvData.cols.length, B: lvData.B, seed: lvData.seed };
-    $("pPre").innerHTML = "<h2>" + (level ? "第 " + level.n + " 关 · " + level.name : "沙盒") + "</h2>" +
-      "<div class='chips'><span class='chip'>3 色 3 堆</span><span class='chip'>牌阵 " + g.T + " 张 · " + g.M + " 列全暗</span><span class='chip'>传送带 " + g.B + " 格</span><span class='chip'>补牌 " + lvData.stocks.map(function (s, c) { return CNAME[c] + s.length; }).join(" ") + "</span>" + (lvData.wild ? "<span class='chip'>★ 万能牌 ×" + lvData.wild + "</span>" : "") + "</div>" +
+    var T = lvData.cols.reduce(function (a, c) { return a + c.length; }, 0);
+    var props = "<span class='chip'>↶ 撤回 ×" + lvData.undo + "</span><span class='chip'>★ 万能 ×" + lvData.wild + "</span>" + (lvData.tray ? "<span class='chip'>＋ 托盘 ×" + lvData.tray + "</span>" : "");
+    $("pPre").innerHTML = "<h2>" + (level ? "第 " + level.n + " 关 · " + level.name : "沙盒") + "</h2>" + (level ? introHTML(level.n) : "") +
+      "<div class='chips'><span class='chip'>" + model.K + " 色 " + model.K + " 堆</span><span class='chip'>牌阵 " + T + " 张</span><span class='chip'>传送带 " + lvData.B + " 格</span><span class='chip'>补牌 " + lvData.stocks.map(function (s, c) { return CNAME[c] + s.length; }).join(" ") + "</span>" + props + "</div>" +
       "<p style='font-size:13px;margin-top:6px'>本关<b>至少要翻 " + lvData.minDraws + " 张补牌</b>才能通关（精确值）。" + (lvData.starLeft ? "<br><small>" + starText(lvData) + "</small>" : "") + "</p>" +
-      (level && level.eval ? "<p class='note'>模拟玩家实测：老玩家 " + Math.round(level.eval.P1 * 100) + "% · 普通玩家 " + Math.round(level.eval.P3 * 100) + "% · 随手点 " + Math.round(level.eval.N * 100) + "% 过关（每档 120 局，用于排难度，不代表真人）。</p>" : "<p class='note'>种子 " + g.seed + "</p>") +
+      (level && level.eval ? "<p class='note'>模拟玩家实测（不用道具）：老玩家 " + Math.round(level.eval.P1 * 100) + "% · 普通玩家 " + Math.round(level.eval.P3 * 100) + "% · 随手点 " + Math.round(level.eval.N * 100) + "% 过关。仅用于排难度，不代表真人。</p>" : "<p class='note'>种子 " + lvData.seed + "</p>") +
       "<div class='row'><button class='btn ghost' onclick='UI.openLevels()'>关卡</button><button class='btn' onclick='UI.start()'>开始</button></div>";
     closeAll(); open("ovPre");
   }
   function start() {
-    model = E.newGame(lvData); ended = false; busy = false; pending = null; armed = false; drag = null; $("coach").onclick = null; guide = { shown: false, on: false }; $("guide").classList.remove("on");
+    model = E.newGame(lvData); ended = false; busy = false; pending = null; hist = []; undoLeft = lvData.undo; armed = false; drag = null;
+    $("coach").onclick = null; guide = { shown: false, on: false }; $("guide").classList.remove("on");
     attempt = { t0: Date.now(), date: new Date().toISOString(), level: cur.level ? cur.level.n : "sandbox", gen: cur.gen, actions: [] };
     buildBoard(); render(model); settleNoTrans(); hud();
     coach(TIPS[cur.level ? cur.level.n : 0] || "只能接同色、差 1 的牌。");
-    $("last").innerHTML = "点出牌区每列最上面的牌；卡住时点补牌区。"; closeAll();
+    $("last").innerHTML = "点出牌区每列最上面的牌；卡住时点补牌区，或用下方道具。"; closeAll();
   }
   function open(id) { $(id).classList.add("on"); }
   function close(id) { $(id).classList.remove("on"); }
   function closeAll() { document.querySelectorAll(".ov.on").forEach(function (o) { o.classList.remove("on"); }); }
   function opt_(k, v) { return "<div class='opt'><span>" + k + "</span>" + v + "</div>"; }
   function openLevels() {
-    var h = "<h2>关卡</h2><p class='sub'>演示版：6 关全部开放，可直接选关。每关由生成器造解并回放验证（保证有解），难度逐关递增。</p><div class='lvgrid'>";
+    var h = "<h2>关卡</h2><p class='sub'>演示版：6 关全部开放。第 2 关起每关一种新机制；每关由生成器造解并回放验证（保证有解）。</p><div class='lvgrid'>";
     LEVELS.forEach(function (l) { var st = save.stars[l.n] || 0, s = ""; for (var i = 1; i <= 3; i++) s += i <= st ? "★" : "☆";
       h += "<button class='lvb' onclick='UI.pick(" + l.n + ")'><b class='mono'>" + l.n + "</b><small>" + l.name + "</small><em>" + s + "</em></button>"; });
     h += "</div><h3>沙盒（生成器参数）</h3>" +
-      opt_("牌阵张数（约）", "<input type='number' id='gT' value='34' min='15' max='48'>") + opt_("列数", "<select id='gM'><option>4</option><option selected>5</option><option>6</option><option>7</option></select>") +
-      opt_("最少要翻几张补牌", "<input type='number' id='gD' value='6' min='0' max='12'>") +
-      opt_("传送带格数", "<select id='gB'><option>3</option><option selected>4</option><option>5</option><option>6</option></select>") +
+      opt_("颜色数", "<select id='gK'><option selected>3</option><option>4</option></select>") +
+      opt_("牌阵张数（约）", "<input type='number' id='gT' value='28' min='15' max='48'>") + opt_("列数", "<select id='gM'><option>4</option><option selected>5</option><option>6</option></select>") +
+      opt_("最少要翻几张补牌", "<input type='number' id='gD' value='3' min='0' max='12'>") +
+      opt_("传送带格数", "<select id='gB'><option>3</option><option>4</option><option selected>5</option><option>6</option></select>") +
       opt_("每叠富余补牌", "<select id='gS'><option>0</option><option>1</option><option selected>2</option><option>3</option></select>") +
-      opt_("预挖倾向（越高越要用传送带）", "<select id='gR'><option value='0'>0</option><option value='.15'>0.15</option><option value='.25' selected>0.25</option><option value='.4'>0.4</option></select>") +
       opt_("种子", "<input type='number' id='gSeed' value='" + (Math.floor(Math.random() * 90000) + 10000) + "'>") +
       "<div id='gOut' class='note'></div><div class='row'><button class='btn ghost' onclick='UI.sbBot()'>bot 估测</button><button class='btn' onclick='UI.sbStart()'>开始沙盒</button></div>" +
       "<div class='row'><button class='btn ghost' onclick='UI.close(\"ovLevels\")'>返回</button></div>";
     $("pLevels").innerHTML = h; closeAll(); open("ovLevels");
   }
-  function sbGen() { var B5 = +$("gB").value; return { T: +$("gT").value, M: +$("gM").value, B: B5, digCap: B5 - 1, D: +$("gD").value, slack: +$("gS").value, dig: +$("gR").value,
-    keep: .7, len: [3, 7], ahead: 1, stay: .55, overlap: .7, vis: .6, digCover: .8, drawRead: .85, slackMode: "useful", seed: +$("gSeed").value || 1 }; }
+  function sbGen() { var B5 = +$("gB").value, K = +$("gK").value; return { K: K, T: +$("gT").value, M: +$("gM").value, B: B5, digCap: B5 - 1, D: +$("gD").value, slack: +$("gS").value, dig: .1,
+    keep: .7, len: [3, 7], ahead: 1, stay: .55, overlap: .7, vis: .6, digCover: .8, drawRead: .85, slackMode: "useful", seed: +$("gSeed").value || 1, shape: K === 4 ? { R: 100, pileX: [99, 163, 227, 291], pileY: 184 } : null }; }
   function botLine(lv) { var a = E.botRate(lv, "smart", 48), b = E.botRate(lv, "random", 48); return "简易 bot 48 局：看明牌 " + Math.round(a.rate * 100) + "% · 随便点 " + Math.round(b.rate * 100) + "%（粗估；正式关卡用离线玩家群体评估）"; }
+  function sel(id, v, list) { return "<select id='" + id + "'><option value=''" + (v == null ? " selected" : "") + ">按关卡</option>" + list.map(function (n) { return "<option" + (v === n ? " selected" : "") + ">" + n + "</option>"; }).join("") + "</select>"; }
   function openDebug() {
+    var s = model ? model.stats : null;
     $("pDebug").innerHTML = "<h2>测试面板</h2><p class='sub'>只给策划和测试用。</p>" +
       opt_("透视暗牌", "<input type='checkbox' id='dPeek' " + (opt.peek ? "checked" : "") + ">") +
       opt_("能接的牌绿框提示", "<select id='dHint'><option value='auto'" + (opt.hint === null ? " selected" : "") + ">默认（仅第 1 关）</option><option value='on'" + (opt.hint === true ? " selected" : "") + ">总是</option><option value='off'" + (opt.hint === false ? " selected" : "") + ">关闭</option></select>") +
       opt_("动画 2 倍速", "<input type='checkbox' id='dFast' " + (opt.fast ? "checked" : "") + ">") +
-      opt_("每关万能牌（重开生效）", "<select id='dWild'>" + [0, 1, 2, 3].map(function (n) { return "<option" + (opt.wild === n ? " selected" : "") + ">" + n + "</option>"; }).join("") + "</select>") +
-      "<div class='kv'><span>种子</span><span>" + (cur ? cur.gen.seed : "-") + "</span><span>生成器解：拿牌 / 翻补牌</span><span>" + (lvData ? lvData.solution.filter(function (e) { return e.col != null; }).length + " / " + lvData.solution.filter(function (e) { return e.draw != null; }).length : "-") + "</span><span>已存测试记录</span><span>" + logs().length + " 局</span></div>" +
+      opt_("撤回次数（重开生效）", sel("dUndo", opt.undo, [0, 3, 9])) + opt_("万能牌（重开生效）", sel("dWild", opt.wild, [0, 1, 2, 3])) + opt_("加托盘（重开生效）", sel("dTray", opt.tray, [0, 1, 2])) +
+      "<div class='kv'><span>种子</span><span>" + (lvData ? lvData.seed : "-") + "</span><span>生成器解：拿牌 / 翻补牌</span><span>" + (lvData ? lvData.solution.filter(function (e) { return e.col != null; }).length + " / " + lvData.solution.filter(function (e) { return e.draw != null; }).length : "-") + "</span>" +
+      (s ? "<span>本局：步 / 上带即落 / 滞留 / 翻补牌 / 连锁</span><span>" + model.step + " / " + s.direct + " / " + s.beltIn + " / " + s.draws + " / " + s.maxChain + "</span>" : "") +
+      "<span>已存测试记录</span><span>" + logs().length + " 局</span></div>" +
       "<div id='dOut' class='note'></div><div class='row'><button class='btn ghost' onclick='UI.dBot()'>本关 bot 估测</button><button class='btn ghost' onclick='UI.exportLogs()'>导出记录</button></div>" +
-      "<div class='row'><button class='btn ghost' onclick='UI.resetAll()'>重置进度</button><button class='btn' onclick='UI.applyDebug()'>完成</button></div>";
+      "<div class='row'><button class='btn ghost' onclick='UI.resetAll()'>重置星级</button><button class='btn' onclick='UI.applyDebug()'>完成</button></div>";
     open("ovDebug");
   }
-  function applyDebug() { opt.peek = $("dPeek").checked; opt.fast = $("dFast").checked; var h = $("dHint").value; opt.hint = h === "auto" ? null : h === "on";
-    var nw = +$("dWild").value, wc = nw !== opt.wild; opt.wild = nw;
+  function applyDebug() {
+    opt.peek = $("dPeek").checked; opt.fast = $("dFast").checked; var h = $("dHint").value; opt.hint = h === "auto" ? null : h === "on";
+    var pv = function (id) { var v = $(id).value; return v === "" ? null : +v; };
+    var nu = pv("dUndo"), nw = pv("dWild"), nt = pv("dTray"), ch = nu !== opt.undo || nw !== opt.wild || nt !== opt.tray; opt.undo = nu; opt.wild = nw; opt.tray = nt;
     if (model) { Object.keys(els).forEach(function (id) { els[id].dataset.face = "x"; }); render(model); } close("ovDebug");
-    if (wc && cur) prepare(cur.level, cur.gen); }
-  function exportLogs() { var blob = new Blob([JSON.stringify(logs(), null, 1)], { type: "application/json" }); var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "SolitaireFlow_v4_测试记录_" + new Date().toISOString().slice(0, 10) + ".json"; a.click(); }
+    if (ch && cur) prepare(cur.level, cur.gen);
+  }
+  function exportLogs() { var blob = new Blob([JSON.stringify(logs(), null, 1)], { type: "application/json" }); var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "SolitaireFlow_v5_测试记录_" + new Date().toISOString().slice(0, 10) + ".json"; a.click(); }
 
   function fit() { var s = Math.min(innerWidth / 390, innerHeight / 800, 1.25); $("stage").style.transform = "scale(" + s + ")"; }
   function init() {
-    fit(); addEventListener("resize", fit); drawTrack();
+    fit(); addEventListener("resize", fit);
     $("bRestart").onclick = function () { if (cur) prepare(cur.level, cur.gen); };
     $("bLevels").onclick = openLevels; $("bRules").onclick = function () { open("ovRules"); }; $("bDebug").onclick = openDebug;
+    $("pUndo").onclick = doUndo; $("pTray").onclick = doTray; $("pWild").addEventListener("pointerdown", onWildDown);
     var lv = LEVELS[0];
-    cur = { level: lv, gen: lv.gen }; lvData = loadData(lv); model = E.newGame(lvData); attempt = { actions: [] };
+    cur = { level: lv, gen: lv.gen }; lvData = loadData(lv); model = E.newGame(lvData); attempt = { actions: [] }; undoLeft = lvData.undo;
     buildBoard(); render(model); settleNoTrans(); hud(); coach(TIPS[lv.n] || "");
     prepare(lv);
     if (!localStorage.getItem(KEY + "_seenRules")) { try { localStorage.setItem(KEY + "_seenRules", 1); } catch (e) {} open("ovRules"); }
   }
   return {
-    init: init, start: start, close: close, openLevels: openLevels, hideGuide: hideGuide,
+    init: init, start: start, close: close, openLevels: openLevels, hideGuide: hideGuide, undo: doUndo,
     retry: function () { prepare(cur.level, cur.gen); }, next: function () { prepare(LEVELS[cur.level.n]); }, pick: function (n) { prepare(LEVELS[n - 1]); },
-    sbBot: function () { var lv = GEN4.build(sbGen()); $("gOut").textContent = lv ? "最少翻 " + lv.minDraws + " 张（精确）· " + botLine(lv) : "这组参数没生成出关卡"; }, sbStart: function () { prepare(null, sbGen()); },
+    sbBot: function () { var lv = GEN5.build(sbGen()); $("gOut").textContent = lv ? "最少翻 " + lv.minDraws + " 张（精确）· " + botLine(lv) : "这组参数没生成出关卡"; }, sbStart: function () { prepare(null, sbGen()); },
     dBot: function () { if (lvData) $("dOut").textContent = botLine(lvData); }, exportLogs: exportLogs, applyDebug: applyDebug,
-    resetAll: function () { if (!confirm("清空星级与解锁进度？测试记录保留。")) return; save = { unlocked: 1, stars: {} }; persist(); close("ovDebug"); prepare(LEVELS[0]); },
-    _state: function () { return { model: model, busy: busy, pending: !!pending, status: E.status(model), lv: lvData, guide: guide.on }; },
-    _play: function (c) { return doPlay(c); }, _draw: function (c) { return doDraw(c); }, _wild: function (c) { return doWild(c); }
+    resetAll: function () { if (!confirm("清空星级？测试记录保留。")) return; save = { stars: {} }; persist(); close("ovDebug"); prepare(LEVELS[0]); },
+    _state: function () { return { model: model, busy: busy, pending: !!pending, status: E.status(model), lv: lvData, guide: guide.on, undoLeft: undoLeft, hist: hist.length, ended: ended }; },
+    _play: function (c) { return doPlay(c); }, _draw: function (c) { return doDraw(c); }, _wild: function (c) { return doWild(c); }, _tray: function () { return doTray(); }
   };
 })();
 UI.init();
